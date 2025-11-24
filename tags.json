@@ -1,0 +1,1828 @@
+{
+    "if_game": {
+        "SignHasTxt": {
+            "Sign Line": "All lines",
+            "Check Mode": "Contains"
+        },
+        "HasRoomForItem": {
+            "Check Mode": "Has Room for Any Item"
+        },
+        "EventBlockEquals": {},
+        "CommandEquals": {
+            "Check Mode": "Check entire command",
+            "Ignore Case": "True"
+        },
+        "EventItemEquals": {
+            "Comparison Mode": "Ignore stack size/durability"
+        },
+        " SignHasTxt ": {
+            "Sign Line": "All lines",
+            "Sign Side": "Front",
+            "Check Mode": "Contains"
+        },
+        "AttackIsCrit": {},
+        "ContainerHas": {},
+        "BlockEquals": {},
+        "InBlock": {},
+        "MovementKey": {
+            "Movement Key": "Forward (W)",
+            "Action": "Just pressed"
+        },
+        "BlockPowered": {
+            "Redstone Power Mode": "Direct power"
+        },
+        "HasPlayer": {},
+        "ContainerHasAll": {},
+        "CmdArgEquals": {
+            "Ignore Case": "True"
+        },
+        "EventCancelled": {},
+        "IsChunkLoaded": {}
+    },
+    "game_action": {
+        "FillContainer": {},
+        "BreakBlock": {},
+        "L PFX Spiral": {},
+        "ParticleSphere": {},
+        "ChangeSign": {
+            "Sign Side": "Front"
+        },
+        "WebRequest": {
+            "Request Method": "Post",
+            "Content Type": "text/plain"
+        },
+        "ClearScBoard": {},
+        "HideSidebar": {},
+        "SetEventDeathMsg": {},
+        "SpawnItemDisplay": {},
+        "WriteTransaction": {},
+        "ParticleSpiral": {},
+        "SetBlockData": {
+            "Overwrite Existing Data": "False"
+        },
+        "Firework": {
+            "Instant": "False",
+            "Movement": "Upwards"
+        },
+        "SetEventDamage": {},
+        "SpawnItem": {
+            "Apply Item Motion": "True"
+        },
+        "SignColor": {
+            "Sign Side": "Front",
+            "Text Color": "Black",
+            "Glowing": "Disable"
+        },
+        "ShulkerBullet": {},
+        "FireworkEffect": {},
+        "SetContainer": {},
+        "SpawnInteraction": {
+            "Responsive": "Disable"
+        },
+        "SetItemInSlot": {},
+        "CloneRegion": {
+            "Ignore Air": "False",
+            "Clone Block Entities": "True"
+        },
+        "UncancelEvent": {},
+        "SetLecternBook": {},
+        "SpawnArmorStand": {
+            "Visibility": "Visible"
+        },
+        "SpawnBlockDisp": {},
+        "ClearContainer": {},
+        "CancelEvent": {},
+        "ParticleEffect": {},
+        "SpawnFangs": {},
+        "SetEventSound": {},
+        "SetEventXP": {},
+        "LockContainer": {},
+        "RemoveScore": {},
+        "CreateHologram": {},
+        "SetExhaustion": {},
+        "ParticleCircle": {},
+        "PFX Line [A]": {},
+        "ClearItems": {},
+        "StartLoop": {},
+        "SetFurnaceSpeed": {},
+        "BlockDropsOn": {},
+        "BoneMeal": {
+            "Show Particles": "True"
+        },
+        "DebugStackTrace": {},
+        "FallingBlock": {
+            "Hurt Hit Entities": "False",
+            "Reform on Impact": "True"
+        },
+        "DiscordWebhook": {},
+        "TickBlock": {},
+        "ReplaceItems": {},
+        "SetEventProj": {},
+        "Explosion": {},
+        "SpawnMob": {},
+        "SetBrushableItem": {},
+        "ParticleLineA": {},
+        "SpawnEnderEye": {
+            "End of Lifespan": "Random"
+        },
+        "ShowSidebar": {},
+        "SpawnPotionCloud": {},
+        "LaunchProj": {},
+        " SetBlock ": {},
+        "SpawnItemDisp": {},
+        "SetBlockGrowth": {
+            "Growth Unit": "Growth Stage Number"
+        },
+        "Wait": {
+            "Delay Unit": "Ticks"
+        },
+        "SetContainerName": {},
+        "SetHead": {},
+        "RemoveHologram": {},
+        "RemoveItems": {},
+        "SpawnRngItem": {
+            "Apply Item Motion": "True"
+        },
+        "SetRegion": {},
+        "ParticleCircleA": {},
+        "SpawnTNT": {},
+        "SpawnExpOrb": {},
+        "SetBiome": {},
+        "SetEventHeal": {},
+        "PFX Path": {},
+        "ApplyTransaction": {},
+        "ParticleRay": {},
+        "GenerateTree": {
+            "Tree Type": "Oak Tree"
+        },
+        "StopLoop": {},
+        "SetScObj": {},
+        "SpawnCrystal": {
+            "Show Bottom": "True"
+        },
+        "SetCampfireItem": {
+            "Campfire Slot": "1"
+        },
+        "SpawnTextDisplay": {
+            "Text Value Merging": "No spaces",
+            "Inherit Styles": "True"
+        },
+        "SpawnVehicle": {},
+        "Lightning": {},
+        "ParticleSpiralA": {},
+        "SetScore": {},
+        "ParticleCluster": {},
+        "BlockDropsOff": {},
+        "ParticleLine": {}
+    },
+    "if_var": {
+        "<=": {},
+        "ItemHasEnchant": {},
+        "ItemIsBlock": {},
+        "DictValueEquals": {},
+        "ItemHasTag": {},
+        "ListSizeEquals": {},
+        "StringMatches": {
+            "Regular Expressions": "Disable",
+            "Ignore Case": "False"
+        },
+        "IsFiltered": {
+            "Link Filter": "True",
+            "Swear Filter": "True",
+            "Caps Filter": "True",
+            "Character Spacing Filter": "True",
+            "Character Drag Filter": "True"
+        },
+        "StartsWith": {
+            "Ignore Case": "False"
+        },
+        "ListValueEq": {},
+        "VarIsType": {
+            "Variable Type": "Number"
+        },
+        "TextMatches": {
+            "Regular Expressions": "Disable",
+            "Ignore Case": "False"
+        },
+        "IsNear": {},
+        " InRange ": {
+            "Location Handling": "Exact"
+        },
+        "ValueIsEmpty": {},
+        "VarExists": {},
+        "DictHasKeys": {
+            "Check Mode": "Has Any Key"
+        },
+        "Legacy !=": {},
+        "BlockIsSolid": {},
+        "ItemEquals": {
+            "Comparison Mode": "Exactly equals"
+        },
+        "ListContains": {
+            "Check Mode": "Has Any Value"
+        },
+        "Legacy =": {},
+        "InRange": {},
+        "LocIsNear": {
+            "Shape": "Sphere"
+        },
+        "ItemIsUnbreakable": {},
+        "Contains": {
+            "Ignore Case": "False"
+        },
+        "!=": {},
+        "<": {},
+        "=": {},
+        ">": {},
+        "EndsWith": {
+            "Ignore Case": "False"
+        },
+        ">=": {},
+        "DictHasKey": {}
+    },
+    "set_var": {
+        "String": {
+            "Text Value Merging": "No spaces"
+        },
+        "AllRegexGroups": {},
+        "SetBundleItems": {},
+        "SetParticleType": {},
+        "SetItemEnchants": {},
+        "ClearItemTag": {},
+        "PurgeVars": {
+            "Match Requirement": "Full word(s) in name",
+            "Ignore Case": "False"
+        },
+        "ShiftAllAxes": {},
+        "GetParticleMat": {},
+        "SetParticleSprd": {},
+        "AbsoluteValue": {},
+        "RemoveItemAttrs": {
+            "Slot": "All",
+            "Attribute": "All"
+        },
+        "AppendValue": {},
+        "%": {
+            "Remainder Mode": "Remainder"
+        },
+        "ShiftOnVector": {
+            "Add Location Rotation": "False"
+        },
+        "GetItemAttribute": {
+            "Attribute": "Armor",
+            "Active Equipment Slot": "Any"
+        },
+        "ClearDict": {},
+        "+": {},
+        "ShiftRotation": {
+            "Rotation Axis": "Pitch"
+        },
+        "-": {},
+        " GetItemName ": {},
+        "GetItemRarity": {},
+        "MultiplyVector": {},
+        "/": {
+            "Division Mode": "Default"
+        },
+        "GetSignText": {
+            "Sign Line": "1"
+        },
+        "Bitwise": {
+            "Operator": "|",
+            "Bit Precision": "Default"
+        },
+        "GetLecternPage": {},
+        "ParseX": {},
+        "ShiftOnAxis": {
+            "Coordinate": "X"
+        },
+        "ParseY": {},
+        "VectorBetween": {},
+        "ParseZ": {},
+        "SetBreakSound": {},
+        "GetVectorComp": {
+            "Component": "X"
+        },
+        "=": {},
+        "RmText": {
+            "Regular Expressions": "Disable"
+        },
+        "AddItemAttribute": {
+            "Attribute": "Armor",
+            "Operation": "Add number",
+            "Active Equipment Slot": "Main hand"
+        },
+        "GetCenterLoc": {},
+        "Base64Decode": {},
+        "AlignLoc": {
+            "Alignment Mode": "Block center",
+            "Coordinates": "All coordinates",
+            "Rotation": "Keep rotation"
+        },
+        "GetSoundVolume": {},
+        "RandomNumber": {
+            "Rounding Mode": "Whole number"
+        },
+        "GetCrossbowProj": {},
+        "GzipDecompress": {},
+        "ContainerName": {},
+        "Raycast": {
+            "Entity Collision": "False",
+            "Block Collision": "All blocks"
+        },
+        "RotateAroundVec": {
+            "Angle Units": "Degrees"
+        },
+        "SetItemFood": {
+            "Can Always Eat": "False"
+        },
+        "GetParticleMotion": {},
+        "SetTooltipStyle": {},
+        "SetConsumable": {
+            "Can Always Eat": "False",
+            "Show Particles": "True",
+            "Consuming Animation": "Eat"
+        },
+        "SetParticleMotion": {},
+        "Average": {},
+        "WrapNumber": {},
+        "ClampLoc": {
+            "Coordinates": "All coordinates"
+        },
+        "SetY": {},
+        "SetMapTexture": {},
+        "GetBlockData": {},
+        "SetX": {},
+        "SortDict": {
+            "Sorting Type": "Sort by Key",
+            "Sorting Order": "Ascending"
+        },
+        "GetLecternBook": {},
+        "GetCustomSound": {},
+        "CrossProduct": {},
+        "x": {},
+        "GetParticleRoll": {},
+        "ParseYaw": {},
+        "DotProduct": {},
+        "SetZ": {},
+        "SetArmorTrim": {
+            "Trim Pattern": "None",
+            "Trim Material": "Amethyst"
+        },
+        "PopListValue": {},
+        "SetParticleOpac": {},
+        "Noise": {
+            "Return Type": "Simplex",
+            "Dimensions": "3D"
+        },
+        "MinNumber": {},
+        "GetPotionType": {},
+        "SetItemName": {},
+        "ListLength": {},
+        "Sine": {
+            "Sine Variant": "Sine",
+            "Input": "Degrees"
+        },
+        "DirectionName": {},
+        "RepeatString": {},
+        "GetItemLore": {},
+        "JoinString": {},
+        "ReverseList": {},
+        "DedupList": {},
+        "CreateDict": {},
+        "GetItemLeftover": {},
+        "GetBlockByMCTag": {
+            "Return Value Type": "Material ID (golden_apple)"
+        },
+        "RoundNumber": {
+            "Round Mode": "Nearest"
+        },
+        "FaceLocation": {
+            "Face Direction": "Toward location"
+        },
+        "GetItemLoreLine": {},
+        "SetVectorLength": {},
+        "SetPotionDur": {},
+        "BlockResistance": {},
+        "SplitString": {},
+        "NormalRandom": {
+            "Distribution": "Normal"
+        },
+        "SetPotionType": {},
+        "GetRegexGroup": {},
+        "AlignVector": {},
+        "SetItemDura": {
+            "Durability Type": "Set Damage"
+        },
+        "SetBreakability": {
+            "Breakability": "Unbreakable"
+        },
+        "SetMaxAmount": {},
+        " GetSignText ": {
+            "Sign Line": "1",
+            "Sign Side": "Front"
+        },
+        "RaycastEntity": {},
+        "SetDictValue": {},
+        "SetAllCoords": {
+            "Coordinate Type": "Plot coordinate"
+        },
+        "RGBColor": {},
+        "SetCanDestroy": {},
+        "HSLColor": {},
+        " GetDirection ": {
+            "Return Type": "Text (3D)"
+        },
+        " GetItemLore ": {},
+        "RemoveListIndex": {},
+        "CellularNoise": {
+            "Return Type": "Voronoi",
+            "Distance Calculation": "Euclidean",
+            "Domain Fractal": "Progressive",
+            "Dimensions": "3D"
+        },
+        "Base64Encode": {},
+        "Logarithm": {},
+        "SetItemTag": {},
+        "TrimString": {},
+        "ParseMiniMessageExpr": {
+            "Allowed Tags": "Style Only",
+            "Parse Legacy Color Codes": "False"
+        },
+        "GetItemAmount": {},
+        "SetPotionAmp": {},
+        "GetCanDestroy": {},
+        "RotateAroundAxis": {
+            "Axis": "X",
+            "Angle Units": "Degrees"
+        },
+        "GetItemName": {},
+        "GetItemDura": {
+            "Durability Type": "Get Damage"
+        },
+        "ShiftInDirection": {
+            "Direction": "Forward"
+        },
+        "JsonToValue": {},
+        "WrapNum": {},
+        "SetModelDataNums": {
+            "Model Value Type": "Floats"
+        },
+        "ReplaceString": {
+            "Regular Expressions": "Disable",
+            "Replacement Type": "All occurrences"
+        },
+        "SetItemGlowing": {
+            "Glowing": "Enable"
+        },
+        " SetItemName ": {},
+        "SetLodestoneLoc": {
+            "Require Lodestone at Location": "False"
+        },
+        "FlattenList": {},
+        "SetItemRarity": {
+            "Rarity": "Default for item type"
+        },
+        "BlockHardness": {},
+        "GetPotionAmp": {},
+        "GetBundleItems": {},
+        "GetParticleAmount": {},
+        "GetDictSize": {},
+        "SetItemAmount": {},
+        "SubtractVectors": {},
+        "SetCase": {
+            "Capitalization Type": "UPPERCASE"
+        },
+        "SetParticleColor": {},
+        "GetLight": {
+            "Light Type": "Combined light"
+        },
+        " GetBookText ": {},
+        "GetDictValues": {},
+        "Vector": {},
+        "Distance": {
+            "Distance Type": "Distance 3D (X/Y/Z)"
+        },
+        "SetItemLore": {},
+        "ParseMiniMessage": {
+            "Allowed Tags": "Style Only",
+            "Parse Legacy Color Codes": "False"
+        },
+        "Root": {},
+        "SetModelDataStrs": {},
+        "SetParticleAmount": {},
+        "AddItemEnchant": {},
+        "AddItemToolRule": {
+            "Correct Tool for Loot": "True"
+        },
+        "GetItemType": {
+            "Return Value Type": "Item ID (golden_apple)"
+        },
+        "GetDirection": {},
+        "GetLoreLine": {},
+        "ArcTangent2": {
+            "Output Type": "Degrees"
+        },
+        "GetParticleType": {},
+        "SetItemMaxDura": {},
+        "RemoveString": {
+            "Regular Expressions": "Disable"
+        },
+        "GetAllBlockData": {
+            "Hide Default": "True"
+        },
+        "SetCrossbowProj": {},
+        "MaxNumber": {},
+        "GetDictKeys": {},
+        "TrimStyledText": {},
+        "SetParticleMat": {},
+        "GetCoord": {
+            "Coordinate Type": "Plot coordinate",
+            "Coordinate": "X"
+        },
+        "RemoveItemTag": {},
+        "GetModelDataStrs": {},
+        "SetParticleSize": {},
+        "GetPotionDur": {},
+        "RandomLoc": {},
+        "SetSoundType": {},
+        "GetLodestoneLoc": {},
+        "ShiftDirection": {
+            "Direction": "Forwards 3D (X/Y/Z)"
+        },
+        "GetContainerName": {},
+        "IndexOfSubstring": {
+            "Ignore Case": "False",
+            "Search Type": "First occurrence"
+        },
+        "GetParticleSprd": {
+            "Spread": "Horizontal"
+        },
+        "SetItemLeftover": {},
+        "ReflectVector": {},
+        "ClearItemAttrs": {},
+        "GetHeadOwner": {
+            "Text Value": "Owner Name"
+        },
+        "GetItemEnchants": {},
+        "AppendDict": {},
+        "GetMaxItemAmount": {},
+        "SetItemModel": {},
+        "GetColorChannels": {
+            "Color Channels": "RGB"
+        },
+        " SetDirection ": {},
+        "SetListValue": {},
+        " SetItemEnchants ": {},
+        "SetBookText": {},
+        "RandomValue": {},
+        " SetItemFlags ": {
+            "Armor Trim": "No Change",
+            "Color": "No Change",
+            "Enchantments": "No Change",
+            "Attributes": "No Change",
+            "Unbreakable": "No Change",
+            "Can Destroy": "No Change",
+            "Can Place On": "No Change",
+            "Potion Effects": "No Change",
+            "Others": "No Change"
+        },
+        "SetItemType": {},
+        "GetSoundType": {},
+        "GetListValue": {},
+        "ValueToJson": {},
+        "BounceNum": {},
+        "Tangent": {
+            "Tangent Variant": "Tangent",
+            "Input": "Degrees"
+        },
+        "VoronoiNoise": {
+            "Cell Edge Type": "Euclidean"
+        },
+        "SetDirection": {
+            "Face Direction": "Towards direction"
+        },
+        "HSBColor": {},
+        "+=": {},
+        "Interpolate": {
+            "Easing": "Linear",
+            "Direction": "In"
+        },
+        "GetSoundVariant": {},
+        "GetItemColor": {},
+        "ClearFormatting": {},
+        "InsertListValue": {},
+        "GetParticleDur": {},
+        "SetSoundVolume": {},
+        "SetCoord": {
+            "Coordinate Type": "Plot coordinate",
+            "Coordinate": "X"
+        },
+        "AddVectors": {},
+        "SanitizeTags": {},
+        "SetPitch": {},
+        "GetParticleFade": {},
+        "RaycastBlock": {
+            "Ignore Passable Blocks": "False",
+            "Fluid Collision": "Ignore fluids"
+        },
+        "SetItemTool": {},
+        "GetTooltipStyle": {},
+        " GetItemEnchants ": {},
+        "SetHeadTexture": {},
+        "GzipCompress": {},
+        "PerlinNoise": {
+            "Fractal Type": "Brownian"
+        },
+        "WorleyNoise": {
+            "Cell Edge Type": "Euclidean",
+            "Distance Calculation": "Primary"
+        },
+        "SetItemColor": {},
+        "GetParticleColor": {},
+        "SetSoundPitch": {},
+        " RoundNumber ": {
+            "Round Mode": "Nearest"
+        },
+        "GetCanPlaceOn": {},
+        "SortList": {
+            "Sort Order": "Ascending"
+        },
+        "SetCustomSound": {},
+        "RemoveDictEntry": {},
+        "FormatTime": {
+            "Format": "2020/08/17 17:20:54"
+        },
+        "SetItemFlags": {
+            "Hide Armor Trim": "No Change",
+            "Hide Color": "No Change",
+            "Hide Enchantments": "No Change",
+            "Hide Attributes": "No Change",
+            "Hide Unbreakable": "No Change",
+            "Hide Can Destroy": "No Change",
+            "Hide Can Place On": "No Change",
+            "Hide Potion Effects": "No Change"
+        },
+        "SetParticleDur": {},
+        "StringLength": {},
+        "GetItemEffects": {},
+        "StyledText": {
+            "Text Value Merging": "No spaces",
+            "Inherit Styles": "True"
+        },
+        "GetMiniMessageExpr": {},
+        "SetYaw": {},
+        " SetItemLore ": {},
+        "SetItemEffects": {},
+        "-=": {},
+        "GetItemTag": {},
+        "CreateList": {},
+        "AppendList": {},
+        "GetContainerItems": {
+            "Ignore Empty Slots": "False"
+        },
+        "GetModelDataNums": {
+            "Model Value Type": "Floats"
+        },
+        "ShiftToward": {},
+        "TrimList": {},
+        "GradientNoise": {
+            "Dimensions": "3D",
+            "Domain Fractal": "Progressive",
+            "Return Type": "Simplex"
+        },
+        "SetItemHideTooltip": {
+            "Tooltip": "Enable"
+        },
+        "GetBlockDrops": {},
+        "NamedRegexGrps": {},
+        "ClearEnchants": {},
+        "Cosine": {
+            "Cosine Variant": "Cosine",
+            "Input": "Degrees"
+        },
+        "GetParticleOpac": {},
+        "GetBreakSound": {},
+        "GetItemByMCTag": {
+            "Return Value Type": "Material ID (golden_apple)"
+        },
+        "SetParticleFade": {},
+        "SetVectorComp": {
+            "Component": "X"
+        },
+        "ParseNumber": {},
+        "Exponent": {},
+        "ShiftAllDirs": {
+            "Ignore Pitch": "False"
+        },
+        "GetValueIndex": {
+            "Search Order": "Ascending (first index)"
+        },
+        "SetItemWeapon": {},
+        "RemItemEnchant": {},
+        "AddItemLore": {},
+        "GetConsumable": {
+            "Consumable Property": "Nutrition"
+        },
+        "GetBookText": {},
+        "SetParticleRoll": {},
+        "SetSoundVariant": {},
+        "ShiftLocation": {
+            "Shift Direction": "(+) Forwards / (-) Backwards"
+        },
+        "RandomizeList": {},
+        "HiddenComponents": {
+            "Hiding Mode": "Hide all"
+        },
+        "ClampNumber": {},
+        "Round": {
+            "Round Mode": "Nearest"
+        },
+        "GetItemModel": {},
+        "GetSoundPitch": {
+            "Return Value Type": "Pitch (number)"
+        },
+        "TranslateColors": {
+            "Translation Type": "From & to color"
+        },
+        "GetBlockGrowth": {
+            "Growth Unit": "Growth stage number"
+        },
+        "GetAllItemTags": {},
+        "RemoveListValue": {
+            "Items to remove": "All Matches"
+        },
+        "BytesToString": {
+            "Signed": "True",
+            "Charset": "UTF-8"
+        },
+        "ShiftAllDirections": {},
+        "ValueNoise": {
+            "Dimensions": "3D",
+            "Domain Fractal": "Progressive",
+            "Return Type": "Value"
+        },
+        "WebResponse": {
+            "Request Method": "Post",
+            "Content Type": "text/plain",
+            "Code Flow": "Synchronous"
+        },
+        "SetAllItemTags": {},
+        "SetCanPlaceOn": {},
+        "GetBlockType": {
+            "Return Value Type": "Block ID (oak_log)"
+        },
+        "ParsePitch": {},
+        "GetDictValue": {},
+        "ContainerLock": {},
+        "GetItemWeapon": {
+            "Weapon Property": "Durability reduction per attack"
+        },
+        "GetBlockPower": {},
+        "GetVectorLength": {
+            "Length Type": "Length"
+        },
+        "ContentLength": {},
+        "SetModelData": {},
+        "StringToBytes": {
+            "Signed": "True",
+            "Charset": "UTF-8"
+        },
+        "SetCoords": {},
+        "GetMaxAmount": {},
+        "GetParticleSize": {}
+    },
+    "if_entity": {
+        "IsVehicle": {},
+        "IsGrounded": {},
+        "IsType": {},
+        "IsProj": {},
+        "IsMob": {},
+        "HasCustomTag": {},
+        "IsSheared": {},
+        "IsItem": {},
+        " IsRiding ": {
+            "Ignore Formatting": "True"
+        },
+        "Exists": {},
+        "IsHitboxNear": {
+            "Shape": "Sphere"
+        },
+        "IsNear": {
+            "Shape": "Sphere"
+        },
+        "HasPotion": {
+            "Check Properties": "None",
+            "Check Mode": "Has any effect"
+        },
+        "IsRiding": {
+            "Compare Text To": "Entity type"
+        },
+        "StandingOn": {},
+        "NameEquals": {
+            "Ignore Formatting": "True"
+        },
+        " StandingOn ": {}
+    },
+    "entity_action": {
+        "DispRotationEuler": {
+            "Rotation Type": "Left Rotation"
+        },
+        "Shear": {},
+        "SetVelocity": {
+            "Add to Current Velocity": "False"
+        },
+        "SetGlowSquidDark": {},
+        "DispRotAxisAngle": {
+            "Rotation Type": "Left Rotation"
+        },
+        "Damage": {
+            "Ignore Formatting": "True"
+        },
+        "SetMobSitting": {
+            "Is Sitting": "Enable"
+        },
+        "SendAnimation": {
+            "Animation Type": "Hurt animation"
+        },
+        "DisableGlowing": {},
+        "SetWardenAnger": {
+            "Ignore Formatting": "True"
+        },
+        "SetHorsePattern": {
+            "Horse Color": "Flaxen chestnut",
+            "Horse Markings": "Stockings and blaze"
+        },
+        "Heal": {},
+        "SetPandaSadTicks": {},
+        "SetItemOwner": {},
+        "SetDyeColor": {
+            "Dye": "White"
+        },
+        "LaunchUp": {
+            "Add to Current Velocity": "True"
+        },
+        "SetAge": {
+            "Age Lock": "Don't change"
+        },
+        " SetName ": {
+            "Name Tag Visibility": "Always"
+        },
+        "NoGravity": {},
+        "SetArmsRaised": {
+            "Arms Raised": "Enable"
+        },
+        "SetMoveSpeed": {
+            "Relative to Entity Base": "Enable"
+        },
+        "SetInvulnerable": {
+            "Invulnerable": "Enable"
+        },
+        "SetFriction": {
+            "Friction Type": "No Friction"
+        },
+        "ProjColl": {},
+        "ArmorStandTags": {
+            "Is Visible": "Don't change",
+            "Is Marker (No Hitbox)": "Don't change",
+            "Allow Item Taking / Adding": "Don't change",
+            "Has Physics / Updates": "Don't change",
+            "Is Small": "Don't change",
+            "Has Arms": "Don't change",
+            "Has Base Plate": "Don't change"
+        },
+        "SetPickupDelay": {},
+        "DropItems": {},
+        "MiscAttribute": {
+            "Attribute": "Scale",
+            "Value Type": "Direct"
+        },
+        "SetCreeperPower": {},
+        "SetMarker": {
+            "Marker": "Enable"
+        },
+        "RemoveCustomTag": {},
+        "SetAbsorption": {},
+        "CreeperCharged": {
+            "Charged": "Enable"
+        },
+        "SetFireTicks": {},
+        "CombatAttribute": {
+            "Attribute": "Attack damage",
+            "Value Type": "Direct"
+        },
+        "SetName": {
+            "Hide Name Tag": "False"
+        },
+        "Jump": {},
+        "BDisplayBlock": {},
+        "SetFreezeTicks": {
+            "Ticking Locked": "Disable"
+        },
+        "TDisplaySeeThru": {
+            "See-through": "Enable"
+        },
+        "SetGliding": {
+            "Gliding": "Enable"
+        },
+        "SetRotation": {},
+        "SetPandaRolling": {
+            "Roll Type": "Roll"
+        },
+        "SetFishPattern": {
+            "Pattern Color": "White",
+            "Body Color": "White",
+            "Pattern": "Kob"
+        },
+        "SetTemperature": {
+            "Temperature Type": "Temperate"
+        },
+        "SetWolfType": {
+            "Wolf Type": "Ashen"
+        },
+        "DispInterpolation": {},
+        "SetHandItem": {
+            "Hand Slot": "Main Hand"
+        },
+        "SetEndermanBlock": {},
+        "LaunchToward": {
+            "Add to Current Velocity": "True",
+            "Ignore Distance": "False"
+        },
+        "SetArmor": {},
+        "GetCustomTag": {},
+        "InteractionSize": {},
+        "FaceLocation": {
+            "Face Direction": "Toward location"
+        },
+        "SetCatType": {
+            "Skin Type": "Tabby"
+        },
+        "SetArrowDamage": {},
+        "DisplayScale": {},
+        "TDisplayAlign": {
+            "Text Alignment": "Center"
+        },
+        "LaunchProj": {},
+        "EnableAI": {},
+        "DisplayBillboard": {
+            "Billboard Type": "Fixed"
+        },
+        "NoProjColl": {},
+        "Tame": {},
+        "SetGoatScreaming": {
+            "Screams": "Enable"
+        },
+        "SetBeeStinger": {
+            "Has Stinger": "Enable"
+        },
+        "MobDisguise": {},
+        "SetMinecartBlock": {},
+        "FoxSleeping": {
+            "Sleeping": "Enable"
+        },
+        "SetEquipment": {
+            "Equipment Slot": "Main hand"
+        },
+        "SetSilenced": {
+            "Silenced": "Enable"
+        },
+        "SetBeeNectar": {
+            "Has Nectar": "Enable"
+        },
+        "AttachLead": {
+            "Ignore Formatting": "True"
+        },
+        "RemovePotion": {},
+        "ShearSheep": {},
+        "ArmorStandSlots": {
+            "Interactions": "Take, swap or place item",
+            "Equipment Slot": "All"
+        },
+        "SetAllayDancing": {
+            "Dancing": "Enable"
+        },
+        "SetRabbitType": {
+            "Skin Type": "Brown"
+        },
+        "SetSize": {},
+        "ShowName": {},
+        "SetAngry": {
+            "Angry": "Enable"
+        },
+        "Undisguise": {},
+        "SetDeathDrops": {
+            "Has Death Drops": "Enable"
+        },
+        "SetPersistent": {
+            "Persistent": "Enable"
+        },
+        "ProjectileItem": {},
+        "SetNameColor": {
+            "Name Color": "Black"
+        },
+        "SetCarryingChest": {
+            "Carrying Chest": "Enable"
+        },
+        "SetParrotColor": {
+            "Parrot Color": "Red"
+        },
+        "DispTranslation": {},
+        "Remove": {},
+        "TDispBackground": {},
+        "DisplayCullingSize": {},
+        "HideName": {},
+        "SetSheepSheared": {
+            "Sheared": "Enable"
+        },
+        "SetAxolotlColor": {
+            "Axolotl Color": "Pink"
+        },
+        "GetAllEntityTags": {},
+        "SetAI": {
+            "AI": "None"
+        },
+        "KBAttribute": {
+            "Attribute": "Knockback resistance",
+            "Value Type": "Direct"
+        },
+        "MovementAttribute": {
+            "Attribute": "Walking speed",
+            "Value Type": "Direct"
+        },
+        "SetRiptiding": {
+            "Riptiding": "Enable"
+        },
+        "SetArrowNoClip": {
+            "Has NoClip": "Enable"
+        },
+        "FallingAttribute": {
+            "Attribute": "Gravity",
+            "Value Type": "Direct"
+        },
+        "SetProjSource": {
+            "Ignore Formatting": "True"
+        },
+        "SetFoxLeaping": {
+            "Leaping": "Enable"
+        },
+        "SetPandaGene": {
+            "Set Gene": "Both",
+            "Gene Type": "Aggressive"
+        },
+        "SetMaxHealth": {
+            "Heal Mob to Max Health": "False"
+        },
+        "SetFishingTime": {},
+        "EndCrystalBeam": {},
+        "FrogEat": {
+            "Ignore Formatting": "True"
+        },
+        "SetSalmonType": {
+            "Salmon Type": "Medium"
+        },
+        "DisplayBrightness": {},
+        "SetProfession": {
+            "Profession": "Armorer"
+        },
+        "ClearPotions": {},
+        "ArmorStandParts": {
+            "Arms": "Enable",
+            "Base Plate": "Enable"
+        },
+        " SetNameVisible ": {
+            "Name Tag Visibility": "Always"
+        },
+        "SetTarget": {
+            "Ignore Formatting": "True"
+        },
+        "TDisplayShadow": {
+            "Text Shadow": "Enable"
+        },
+        "SetNameVisible": {
+            "Name Tag Visible": "Enable"
+        },
+        "SetInvulTicks": {},
+        "SetShulkerPeek": {
+            "Is Silent": "Enable"
+        },
+        " SetPose ": {
+            "Pose": "Standing"
+        },
+        "SetRearing": {
+            "Rearing": "Enable"
+        },
+        "SetCloudRadius": {},
+        "SetGravity": {
+            "Gravity": "Disable"
+        },
+        "DispTPDuration": {},
+        "SetWitherInvul": {},
+        "Silence": {},
+        "SetArrowPierce": {},
+        "DisplayShadow": {},
+        "InteractResponse": {
+            "Responsive": "Enable"
+        },
+        "UseItem": {
+            "Hand": "Main Hand",
+            "Use Item": "Enable"
+        },
+        "RideEntity": {
+            "Ignore Formatting": "True"
+        },
+        "DisplayMatrix": {},
+        "NoDrops": {},
+        "SetWolfSoundType": {
+            "Wolf Sound Type": "Angry"
+        },
+        "SnifferState": {
+            "Behavior": "Idle"
+        },
+        "EnableGlowing": {},
+        "Teleport": {
+            "Keep Current Rotation": "False"
+        },
+        "DisplayGlowColor": {},
+        "SetVisualFire": {
+            "On Fire": "True"
+        },
+        "SetAge/Size": {},
+        "L SetArmor": {},
+        "SetSaddle": {
+            "Saddle": "Enable"
+        },
+        "SetBulletTarget": {
+            "Ignore Formatting": "True"
+        },
+        "TDisplayLineWidth": {},
+        "SetDragonPhase": {
+            "Phase": "Flying"
+        },
+        "SetLlamaColor": {
+            "Llama Color": "Brown"
+        },
+        "SetVillagerBiome": {
+            "Biome": "Desert"
+        },
+        "SetCreeperFuse": {},
+        "SetBaby": {
+            "Baby": "Enable"
+        },
+        "MooshroomType": {
+            "Mooshroom Variant": "Red"
+        },
+        "SetInvisible": {
+            "Invisible": "Enable"
+        },
+        "SheepEat": {},
+        "SetCatResting": {
+            "Resting": "Enable"
+        },
+        "GivePotion": {
+            "Overwrite Effect": "True",
+            "Effect Particles": "Regular"
+        },
+        "SetGoatHorns": {
+            "Left Horn": "No Change",
+            "Right Horn": "No Change"
+        },
+        "SetGlowing": {
+            "Glowing": "Enable"
+        },
+        "SetPandaOnBack": {
+            "On Its Back": "Enable"
+        },
+        "IDisplayModelType": {
+            "Model Type": "None"
+        },
+        "SetHealth": {},
+        "BlockDisguise": {},
+        "SetCollidable": {
+            "Collision": "Disable"
+        },
+        "ArmorStandPose": {
+            "Armor Stand Part": "Head"
+        },
+        "LaunchFwd": {
+            "Add to Current Velocity": "True",
+            "Launch Axis": "Pitch and Yaw"
+        },
+        "SetFallDistance": {},
+        "MoveToLoc": {},
+        "TDisplayOpacity": {},
+        "IDisplayItem": {},
+        "AttackAnimation": {
+            "Animation Arm": "Swing main arm"
+        },
+        "SnowmanPumpkin": {
+            "Pumpkin": "Disable"
+        },
+        "SetCustomTag": {},
+        "Gravity": {},
+        "DisplayViewRange": {},
+        "NoAI": {},
+        "PlayerDisguise": {},
+        "SetItem": {},
+        "Explode": {},
+        "SetDigging": {
+            "Digging Type": "Emerge"
+        },
+        "MoveTo": {},
+        "SetArrowHitSound": {},
+        "SetVexCharging": {
+            "Charging": "Enable"
+        },
+        "SetVillagerExp": {},
+        "IgniteCreeper": {},
+        "SetCelebrating": {
+            "Celebrate": "Enable"
+        },
+        "TDisplayText": {
+            "Text Value Merging": "No spaces",
+            "Inherit Styles": "True"
+        },
+        "SetHorseJump": {},
+        "Unsilence": {},
+        "HealthAttribute": {
+            "Attribute": "Maximum health",
+            "Value Type": "Direct"
+        },
+        "Ram": {
+            "Ignore Formatting": "True"
+        },
+        "SetFoxType": {
+            "Fox Type": "Red"
+        }
+    },
+    "if_player": {
+        "HasRoomForItem": {
+            "Check Mode": "Has Room for Any Item",
+            "Checked Slots": "Main inventory"
+        },
+        "IsHoldingOff": {},
+        "NoItemCooldown": {},
+        "IsUsingItem": {},
+        "HasAllItems": {},
+        "HasItem": {
+            "Check Mode": "Has Any Item"
+        },
+        "BlockEquals": {},
+        "IsWearing": {
+            "Check Mode": "Is Wearing Some"
+        },
+        "IsNear": {
+            "Shape": "Sphere"
+        },
+        "IsRiding": {
+            "Compare Text To": "Entity type"
+        },
+        "CmdEquals": {
+            "Check Mode": "Check Entire Command",
+            "Ignore Case": "True"
+        },
+        "CursorItem": {},
+        "SlotEquals": {},
+        "ItemEquals": {},
+        "MenuSlotEquals": {},
+        "HasPermission": {
+            "Permission": "Developer or builder"
+        },
+        " IsRiding ": {
+            "Ignore Formatting": "True"
+        },
+        "MainHandEquals": {
+            "Main Hand": "Left Hand"
+        },
+        "IsSneaking": {},
+        "MovementKey": {
+            "Forward (W)": "Don't check",
+            "Backward (S)": "Don't check",
+            "Left (A)": "Don't check",
+            "Right (D)": "Don't check",
+            "Jump (Space)": "Don't check",
+            "Sneak (Left Shift)": "Don't check",
+            "Sprint (Left Control)": "Don't check"
+        },
+        "IsFlying": {},
+        "InvOpen": {
+            "Inventory Type": "Any Inventory"
+        },
+        "HasSlotItem": {},
+        "IsSprinting": {},
+        "IsGliding": {},
+        "CmdArgEquals": {
+            "Ignore Case": "True"
+        },
+        "IsLookingAt": {
+            "Fluid Mode": "Ignore fluids"
+        },
+        "InWorldBorder": {},
+        "IsInGameMode": {
+            "Game Mode": "Survival"
+        },
+        "UsingPack": {},
+        "IsSwimming": {},
+        "StandingOn": {},
+        " StandingOn ": {},
+        "IsGrounded": {},
+        "OwnsProduct": {},
+        "IsHoldingMain": {},
+        "IsHolding": {
+            "Hand Slot": "Either hand"
+        },
+        "IsBlocking": {},
+        "IsHitboxNear": {
+            "Shape": "Sphere"
+        },
+        "HasPotion": {
+            "Check Properties": "None",
+            "Check Mode": "Has any effect"
+        },
+        "NameEquals": {},
+        "CanFly": {}
+    },
+    "player_action": {
+        "SetHotbar": {},
+        "SetReducedDebug": {
+            "Reduced Debug Info Enabled": "True"
+        },
+        "CloseInv": {},
+        "GiveItems": {},
+        "NoKeepInv": {},
+        "SetHandCrafting": {
+            "Allow Hand Crafting": "Disable"
+        },
+        "BossBar": {
+            "Bar Slot": "Slot 1",
+            "Bar Style": "Solid",
+            "Sky Effect": "None",
+            "Bar Color": "Purple"
+        },
+        "ParticleSphere": {},
+        "SetVelocity": {
+            "Add to Current Velocity": "False"
+        },
+        "Particle": {},
+        "AddInvRow": {
+            "New Row Position": "Bottom row"
+        },
+        "NoNatRegen": {},
+        "DisplayLightning": {},
+        "Damage": {
+            "Ignore Formatting": "True"
+        },
+        "SendAnimation": {
+            "Animation Type": "Hurt animation"
+        },
+        "SetXPProg": {},
+        "SetInventory": {},
+        "TpSequence": {},
+        "Heal": {},
+        "SetSpawnPoint": {},
+        "SetInventoryKept": {
+            "Inventory Kept": "Enable"
+        },
+        "LaunchUp": {
+            "Add to Current Velocity": "True"
+        },
+        "GetTargetEntity": {
+            "Ignore Blocks": "False"
+        },
+        "ForceFlight": {
+            "Flight Mode": "Start Flight"
+        },
+        "LoadInv": {
+            "Code Flow": "Synchronous"
+        },
+        "ChatStyle": {},
+        "Kick": {},
+        "ProjColl": {},
+        "MiscAttribute": {
+            "Attribute": "Scale",
+            "Value Type": "Direct"
+        },
+        "SpectateTarget": {
+            "Ignore Formatting": "True"
+        },
+        "HurtAnimation": {},
+        "SurvivalMode": {},
+        "DisplayBellRing": {
+            "Ring Direction": "North"
+        },
+        "SetStatus": {},
+        "SetCursorItem": {},
+        "SetAbsorption": {},
+        "SetFireTicks": {},
+        "CombatAttribute": {
+            "Attribute": "Attack damage",
+            "Value Type": "Direct"
+        },
+        "SetGamemode": {
+            "Flight Mode": "Respect Gamemode",
+            "Gamemode": "Survival"
+        },
+        "RemoveInvRow": {
+            "Row to Remove": "Bottom row"
+        },
+        "WakeUpAnimation": {},
+        "DisableBlocks": {},
+        "SetScoreObj": {},
+        "L SetHealth": {
+            "Heal Type": "Regular Health"
+        },
+        "ParticleEffect": {},
+        "ClearInv": {
+            "Clear Mode": "Entire inventory",
+            "Clear Crafting and Cursor": "True"
+        },
+        "SetFreezeTicks": {
+            "Ticking Locked": "Disable"
+        },
+        "SetGliding": {
+            "Gliding": "Enable"
+        },
+        "SetRotation": {},
+        "ClearItems": {},
+        "OpenSign": {
+            "Sign Side": "Front"
+        },
+        "SetFlying": {
+            "Flying": "Enable"
+        },
+        "DisplayBlockOpen": {
+            "Container State": "Open"
+        },
+        "SetHandItem": {
+            "Hand Slot": "Main Hand"
+        },
+        "SendAdvancement": {
+            "Toast Type": "Advancement"
+        },
+        "ClearChat": {},
+        "SetMenuItem": {},
+        "LaunchToward": {
+            "Add to Current Velocity": "True",
+            "Ignore Distance": "False"
+        },
+        "SetArmor": {},
+        "DisplayGateway": {
+            "Animation Type": "Initial beam"
+        },
+        "GiveSaturation": {},
+        "DisplayEquipment": {},
+        "GiveExp": {
+            "Give Experience": "Points"
+        },
+        "FaceLocation": {},
+        "ClearScoreboard": {},
+        "ActionBar": {
+            "Text Value Merging": "No spaces",
+            "Inherit Styles": "True"
+        },
+        "SetChatTag": {},
+        "ShiftWorldBorder": {},
+        "DisplaySignText": {
+            "Sign Side": "Front",
+            "Text Color": "Black",
+            "Glowing": "Disable"
+        },
+        "SetSpeed": {
+            "Speed Type": "Ground speed"
+        },
+        "ExpandInv": {},
+        "LaunchProj": {},
+        "NoProjColl": {},
+        "ShowDisguise": {},
+        "ParticleCuboidA": {
+            "Fill Type": "Wireframe"
+        },
+        "PlaySound": {
+            "Sound Source": "Master"
+        },
+        "SetCompass": {},
+        "RngTeleport": {
+            "Keep Current Rotation": "False"
+        },
+        "MobDisguise": {},
+        "EnableBlocks": {},
+        "OpenBlockInv": {},
+        "ParticleCircleA": {},
+        "RemoveBossBar": {
+            "Boss Bar Slot": "All boss bars"
+        },
+        "SetEquipment": {
+            "Equipment Slot": "Main hand"
+        },
+        "GiveRngItem": {},
+        "SetDropsEnabled": {
+            "Spawn Death Drops": "Enable"
+        },
+        "SendToPlot": {},
+        "RemovePotion": {},
+        "DisplayFracture": {
+            "Overwrite Previous Fracture": "True"
+        },
+        "SetEntityHidden": {
+            "Hidden": "Enable",
+            "Ignore Formatting": "True"
+        },
+        "SetSidebar": {
+            "Sidebar": "Enable"
+        },
+        "AllowDrops": {},
+        "DisplayHighlighter": {},
+        "Vibration": {},
+        "SetSlot": {},
+        "ParticleRay": {},
+        "ParticleCuboid": {
+            "Fill Type": "Wireframe"
+        },
+        "SendMessageSeq": {
+            "Alignment Mode": "Regular"
+        },
+        "SetNamePrefix": {
+            "Text Type": "Prefix"
+        },
+        "ClearDispBlock": {},
+        "SetRainLevel": {},
+        "Undisguise": {},
+        "ParticleSpiralA": {},
+        "InstantRespawn": {
+            "Instant Respawn": "Enable"
+        },
+        "SetScore": {},
+        "SetNameColor": {
+            "Name Color": "Black"
+        },
+        "ReachAttribute": {
+            "Attribute": "Block interaction range",
+            "Value Type": "Direct"
+        },
+        "SetAtkSpeed": {},
+        "DisablePvp": {},
+        "SetTickRate": {},
+        "PlayEntitySound": {
+            "Sound Source": "Master",
+            "Ignore Formatting": "True"
+        },
+        "ReplaceProj": {},
+        "SetExp": {
+            "Set Experience": "Level"
+        },
+        "MiningAttribute": {
+            "Attribute": "Block break speed",
+            "Value Type": "Direct"
+        },
+        "KBAttribute": {
+            "Attribute": "Knockback resistance",
+            "Value Type": "Direct"
+        },
+        "MovementAttribute": {
+            "Attribute": "Walking speed",
+            "Value Type": "Direct"
+        },
+        "ParticleSpiral": {},
+        "FallingAttribute": {
+            "Attribute": "Gravity",
+            "Value Type": "Direct"
+        },
+        "SetAllowFlight": {
+            "Allow Flight": "Enable"
+        },
+        "SetMaxHealth": {
+            "Heal Player to Max Health": "False"
+        },
+        " RemoveBossBar ": {},
+        "SetFogDistance": {},
+        "AdventureMode": {},
+        "SpectatorMode": {},
+        "DispHeadTexture": {},
+        "ClearPotions": {},
+        "SetTabListInfo": {
+            "Player List Field": "Header",
+            "Text Value Merging": "No spaces",
+            "Inherit Styles": "True"
+        },
+        "EnablePvp": {},
+        "PromptPurchase": {},
+        "HideDisguise": {},
+        "ScoreLineFormat": {
+            "Number Format": "Fixed"
+        },
+        " SetBossBar ": {
+            "Bar Style": "Solid",
+            "Sky Effect": "None",
+            "Bar Color": "Purple"
+        },
+        "SetSkin": {},
+        "SpectatorCollision": {
+            "Spectator Collision": "Enable"
+        },
+        "SetNameVisible": {
+            "Name Tag Visible": "Disable"
+        },
+        "SetInvulTicks": {},
+        "EnableFlight": {},
+        "SetStingsStuck": {},
+        "RemoveScore": {},
+        "DisallowDrops": {},
+        "SetExhaustion": {},
+        "ParticleCircle": {},
+        "DisplayBlock": {},
+        "RideEntity": {
+            "Ignore Formatting": "True"
+        },
+        "WeatherRain": {},
+        "RmWorldBorder": {},
+        "ResourcePack": {},
+        " SetInvName ": {
+            "Alignment Mode": "Regular"
+        },
+        "GiveExhaustion": {},
+        "Teleport": {
+            "Keep Current Rotation": "False",
+            "Keep Velocity": "False"
+        },
+        "SetAllowPVP": {
+            "PVP": "Disable"
+        },
+        "DisableFlight": {},
+        "SetVisualFire": {
+            "On Fire": "True"
+        },
+        "SetDisguiseVisible": {
+            "Disguise Visible": "Disable"
+        },
+        "SetArrowsStuck": {},
+        "GetItemCooldown": {},
+        "SetItems": {},
+        "KeepInv": {},
+        "ReplaceItems": {},
+        "SendMessage": {
+            "Alignment Mode": "Regular",
+            "Text Value Merging": "Add spaces",
+            "Inherit Styles": "True"
+        },
+        "SetSlotItem": {},
+        "PlaySoundSeq": {
+            "Sound Source": "Master"
+        },
+        "ParticleLineA": {},
+        "Respawn": {},
+        "SetInvName": {},
+        "SetItemCooldown": {},
+        "SetPlayerWeather": {
+            "Weather": "Downfall"
+        },
+        "SendHover": {},
+        "SetShoulder": {
+            "Shoulder": "Left",
+            "Type": "Remove"
+        },
+        "SetAirTicks": {},
+        "DisplayPickup": {
+            "Ignore Formatting": "True"
+        },
+        "SetWorldBorder": {},
+        "SetPlayerTime": {},
+        "GiveFood": {},
+        "NatRegen": {},
+        "GivePotion": {
+            "Show Icon": "True",
+            "Overwrite Effect": "True",
+            "Effect Particles": "Regular"
+        },
+        "RemoveItems": {},
+        "BoostElytra": {},
+        "SaveInv": {},
+        "OpenBook": {},
+        "SetHealth": {},
+        "BlockDisguise": {},
+        "RollbackBlocks": {},
+        "NoDeathDrops": {},
+        "WalkSpeed": {},
+        "ClearHighlighters": {},
+        "SetCollidable": {
+            "Collision": "Disable"
+        },
+        "LaunchFwd": {
+            "Add to Current Velocity": "True",
+            "Launch Axis": "Pitch and Yaw"
+        },
+        "SetFallDistance": {},
+        "CreativeMode": {},
+        "AttackAnimation": {
+            "Animation Arm": "Swing main arm"
+        },
+        "DisplayHologram": {},
+        " SetAbsorption ": {},
+        "DeathDrops": {},
+        "ShowInv": {},
+        "SetFoodLevel": {},
+        "PlayerDisguise": {},
+        "SetSaturation": {},
+        "WeatherClear": {},
+        "SendTitle": {},
+        "ScoreDefFormat": {
+            "Number Format": "Fixed"
+        },
+        "StopSound": {
+            "Sound Source": "Master"
+        },
+        "HealthAttribute": {
+            "Attribute": "Maximum health",
+            "Value Type": "Direct"
+        },
+        "ParticleLine": {}
+    },
+    "call_func": {},
+    "select_obj": {
+        "LastMob": {},
+        "RandomPlayer": {},
+        "LastEntity": {},
+        "Shooter": {},
+        "AllMobs": {},
+        "EntityName": {
+            "Ignore Formatting": "True"
+        },
+        "FilterRandom": {},
+        "DefaultEntity": {},
+        "PlayerName": {},
+        "AllEntities": {},
+        "Damager": {},
+        "FilterDistance": {
+            "Ignore Y-Axis": "False",
+            "Compare Mode": "Nearest"
+        },
+        "FilterRay": {
+            "Block Collision": "Solid blocks"
+        },
+        "Reset": {},
+        "EventTarget": {
+            "Event Target": "Default"
+        },
+        "Killer": {},
+        "Victim": {},
+        "EntitiesCond": {},
+        "AllPlayers": {},
+        "Invert": {},
+        "RandomEntity": {},
+        "FilterCondition": {},
+        "MobsCond": {},
+        "FilterSort": {
+            "Sort Order": "Ascending"
+        },
+        "Projectile": {},
+        "DefaultPlayer": {},
+        "PlayersCond": {},
+        "MobName": {}
+    },
+    "control": {
+        "StopRepeat": {},
+        "Return": {},
+        "PrintDebug": {
+            "Permission": "Developer",
+            "Text Value Merging": "Add Spaces",
+            "Highlighting": "None",
+            "Sound": "Default",
+            "Message Style": "Debug"
+        },
+        "ReturnNTimes": {},
+        "Skip": {},
+        "End": {},
+        "Wait": {
+            "Time Unit": "Ticks"
+        }
+    },
+    "repeat": {
+        "Adjacent": {
+            "Change Location Rotation": "False",
+            "Include Origin Block": "False",
+            "Pattern": "Adjacent (6 blocks)"
+        },
+        "Path": {
+            "Rotate Location": "False"
+        },
+        "Multiple": {},
+        "Grid": {},
+        "DoWhile": {},
+        "While": {},
+        "Range": {},
+        "ForEach": {
+            "Allow List Changes": "True"
+        },
+        "Sphere": {
+            "Point Locations Inwards": "False"
+        },
+        "Forever": {},
+        " Range ": {},
+        "ForEachEntry": {}
+    },
+    "start_process": {
+        "dynamic": {
+            "Target Mode": "With current targets",
+            "Local Variables": "Don't copy"
+        }
+    }
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>PseudoDF</title>
+
+    <!-- CodeMirror -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/material-darker.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/mode/simple.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let TAGS_FILE = null;
+
+        fetch("tags.json")
+            .then(r => r.json())
+            .then(json => {
+                TAGS_FILE = json;
+                console.log("TAGS_FILE cargado:", TAGS_FILE);
+
+                document.getElementById("processBtn").disabled = false;
+            })
+            .catch(err => console.error("Error cargando tags.json:", err));
+    </script>
+
+    <style>
+
+        .cm-keyword       { color: #ff7dd8 !important; }
+        .cm-variable      { color: #78f4ff !important; }
+        .cm-variable-2    { color: #7dffb1 !important; }
+        .cm-def           { color: #417dff !important; }
+        .cm-property      { color: #41b3ff !important; }
+        .cm-atom          { color: #ffa358 !important; }
+        .cm-number        { color: #f1ff70 !important; }
+        .cm-string        { color: #C3E88D; }
+        .cm-operator      { color: #a6c2ff !important; }
+        .cm-bracket       { color: #FFCB6B; }
+        .cm-comment       { color: #f2ffaa5e !important; font-style: italic; }
+        .cm-semicolon     { color: #ffcb6bbe !important; }
+
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        #outputContainer {
+            border: 1px solid #444;
+        }
+
+        .CodeMirror {
+            height: 1600px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>PseudoDF</h1>
+
+    <h3>Input:</h3>
+    <textarea id="input" placeholder="Enter nbt data"></textarea>
+
+    <button id="processBtn" onclick="procesar()" disabled>Process</button>
+
+    <h3>Output:</h3>
+
+    <div id="outputContainer"></div>
+
+    <script>
+        CodeMirror.defineSimpleMode("pseudodf", {
+            start: [
+
+                { regex: /"(?:[^"\\]|\\.)*"/, token: "string" },
+                { regex: /'(?:[^'\\]|\\.)*'/, token: "string" },
+
+                { regex: /\/\/(.+)/, token: "comment"},
+
+                { regex: /\b(Loc|Vec|Snd|Par|Pot|GVal|Tag|Item)\s*(?=\()/, token: "atom" },
+
+                { regex: /\b(Player|Entity|Game|Set|Call|Start|Control|Select)(?=\.)/, token: "def" },
+
+                { regex: /\b(ifPlayer|ifEntity|ifGame|ifVar|Repeat)(?=\.)/, token: "def" },
+                { regex: /if\s/, token: "def" },
+
+                { regex: /(Function|Process|PlayerEvent|EntityEvent)\s/, token: "keyword" },
+
+                { regex: /(?<=\.)[A-Za-z_][A-Za-z0-9_]*/, token: "property" },
+                { regex: /\b[A-Za-z_][A-Za-z0-9_]*(?=\s*\()/, token: "property" },
+
+                { regex: /\b([A-Za-z_][A-Za-z0-9_]*)+(:)/, token: ["operator"] },
+
+                { regex: /\b(line|local|game|save|Param)\s+([A-Za-z0-9_%@()]+)/, token: ["variable-2", "variable"] },
+
+                { regex: /\b-?(?:\d*\.\d+|\d+)\b/, token: "number" },
+
+                { regex: /[{}()[\],]/, token: "bracket" },
+                { regex: /;/, token: "semicolon" },
+
+                { regex: /[A-Za-z_][A-Za-z0-9_]*/, token: "variable" }
+            ]
+            });
+
+    </script>
+
+    <script>
+
+        const editor = CodeMirror(document.getElementById("outputContainer"), {
+            value: "// Output aparecerá aquí.",
+            mode: "pseudodf",
+            theme: "material-darker",
+            lineNumbers: true,
+            lineWrapping: false  
+        });
+
+        function procesar() {
+            const text = document.getElementById("input").value;
+
+            const resultado = `${process_all(text)}`;
+
+            editor.setValue(resultado); 
+        }
+    </script>
+
+</body>
+</html>
