@@ -125,7 +125,7 @@ require(["vs/editor/editor.main"], function () {
                 [/%(default|uuid|selected|damager|killer|shooter|victim|projectile)/, "%code"],
                 [/%(random|round|index|entry|var|math)(?=\(.*\))/, "%code"],
 
-                [/[A-Za-z0-9_%@\.·\-]+(?=\s*[%+\-=;,:)])/, "variable"],
+                [/[A-Za-z0-9_%@\.·\-]+(?=\s*[%+\/=;,:<>)\-])/, "variable"],
 
                 [/;/, "delimiter"]
             ]
@@ -188,7 +188,7 @@ function process() {
 
     const resultado =
         "// Code processed successfully\n" +
-        "// You can manually edit it before sharing\n\n" +
+        "// You can edit it before sharing it\n\n" +
         process_all(text);
 
     editor.setValue(resultado);
@@ -197,4 +197,3 @@ function process() {
 
 </body>
 </html>
-
