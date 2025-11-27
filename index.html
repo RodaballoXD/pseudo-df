@@ -3,47 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <title>PseudoDF</title>
-
-    <!-- CodeMirror -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/material-darker.min.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/mode/simple.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script src="script.js"></script>
-    <script>
-        let TAGS_FILE = null;
-
-        fetch("tags.json")
-            .then(r => r.json())
-            .then(json => {
-                TAGS_FILE = json;
-                console.log("TAGS_FILE cargado:", TAGS_FILE);
-
-                document.getElementById("processBtn").disabled = false;
-            })
-            .catch(err => console.error("Error cargando tags.json:", err));
-    </script>
+    <!-- <link rel="icon" type="image/png" href="icon.png"> -->
 
     <style>
-
-        .cm-keyword       { color: #ff7dd8 !important; }
-        .cm-variable      { color: #78f4ff !important; }
-        .cm-variable-2    { color: #7dffb1 !important; }
-        .cm-def           { color: #417dff !important; }
-        .cm-property      { color: #41b3ff !important; }
-        .cm-atom          { color: #ffa358 !important; }
-        .cm-number        { color: #f1ff70 !important; }
-        .cm-string        { color: #C3E88D; }
-        .cm-operator      { color: #a6c2ff !important; }
-        .cm-bracket       { color: #FFCB6B; }
-        .cm-comment       { color: #f2ffaa5e !important; font-style: italic; }
-        .cm-semicolon     { color: #ffcb6bbe !important; }
-
         body {
             font-family: sans-serif;
             padding: 20px;
@@ -66,86 +28,172 @@
             margin-bottom: 15px;
         }
 
-        #outputContainer {
+        #editorContainer {
+            width: 100%;
+            height: 800px;
             border: 1px solid #444;
         }
-
-        .CodeMirror {
-            height: 1600px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
     </style>
+
+    <script>
+        let TAGS_FILE = null;
+        fetch("tags.json")
+            .then(r => r.json())
+            .then(json => {
+                TAGS_FILE = json;
+                console.log("TAGS_FILE cargado:", TAGS_FILE);
+                document.getElementById("processBtn").disabled = false;
+            })
+            .catch(err => console.error("Error cargando tags.json:", err));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script src="script.js"></script>
 </head>
 
 <body>
 
-    <h1>PseudoDF</h1>
+<h1>PseudoDF</h1>
 
-    <h3>Input:</h3>
-    <textarea id="input" placeholder="Enter nbt data"></textarea>
+<h3>Input:</h3>
+<textarea id="input" placeholder="Enter NBT data"></textarea>
 
-    <button id="processBtn" onclick="procesar()" disabled>Process</button>
+<button id="processBtn" onclick="process()">Process</button>
 
-    <h3>Output:</h3>
+<h3>Output:</h3>
 
-    <div id="outputContainer"></div>
+<div id="editorContainer"></div>
 
-    <script>
-        CodeMirror.defineSimpleMode("pseudodf", {
-            start: [
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-                { regex: /"(?:[^"\\]|\\.)*"/, token: "string" },
-                { regex: /'(?:[^'\\]|\\.)*'/, token: "string" },
+<script>
+require.config({
+    paths: {
+        vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+    }
+});
 
-                { regex: /\/\/(.+)/, token: "comment"},
+require(["vs/editor/editor.main"], function () {
+    monaco.languages.register({ id: "pseudodf" });
 
-                { regex: /\b(Loc|Vec|Snd|Par|Pot|GVal|Tag|Item)\s*(?=\()/, token: "atom" },
+    monaco.languages.setLanguageConfiguration("pseudodf", {
+        brackets: [
+            ['{', '}'],
+            ['[', ']'],
+            ['(', ')']
+        ],
+        autoClosingPairs: [
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '"', close: '"' },
+            { open: "'", close: "'" }
+        ]
+    });
 
-                { regex: /\b(Player|Entity|Game|Set|Call|Start|Control|Select)(?=\.)/, token: "def" },
+    monaco.languages.setMonarchTokensProvider("pseudodf", {
+        brackets: [
+            { open: '{', close: '}', token: 'delimiter.curly' },
+            { open: '[', close: ']', token: 'delimiter.bracket' },
+            { open: '(', close: ')', token: 'delimiter.parenthesis' }
+        ],
+        tokenizer: {
+            root: [
+                [/".*?"/, "string"],
+                [/'.*?'/, "string"],
 
-                { regex: /\b(ifPlayer|ifEntity|ifGame|ifVar|Repeat)(?=\.)/, token: "def" },
-                { regex: /if\s/, token: "def" },
+                [/\/\/.*$/, "comment"],
 
-                { regex: /(Function|Process|PlayerEvent|EntityEvent)\s/, token: "keyword" },
+                [/\b(Loc|Vec|Snd|Par|Pot|GVal|Tag|Item|FunctionHint)(?=\()/, "type"],
 
-                { regex: /(?<=\.)[A-Za-z_][A-Za-z0-9_]*/, token: "property" },
-                { regex: /\b[A-Za-z_][A-Za-z0-9_]*(?=\s*\()/, token: "property" },
+                [/\b(Player|Entity|Game|Set|Call|Start|Control|Select)(?=\.)/, "block"],
+                [/\b(ifPlayer|ifEntity|ifGame|ifVar|Repeat)(?=\.)/, "block"],
+                [/\b(if|else)\b/, "block"],
 
-                { regex: /\b([A-Za-z_][A-Za-z0-9_]*)+(:)/, token: ["operator"] },
+                [/\b(Function|Process|PlayerEvent|EntityEvent)\b/, "keyword"],
 
-                { regex: /\b(line|local|game|save|Param)\s+([A-Za-z0-9_%@()]+)/, token: ["variable-2", "variable"] },
+                [/(\.)([A-Za-z_][A-Za-z0-9_]*)/, ["delimiter", "function"]],
+                [/\b[A-Za-z_][A-Za-z0-9_]*(?=\s*\()/, "function"],
 
-                { regex: /\b-?(?:\d*\.\d+|\d+)\b/, token: "number" },
+                [/\b([A-Za-z])*(?=:)/, "target"],
 
-                { regex: /[{}()[\],]/, token: "bracket" },
-                { regex: /;/, token: "semicolon" },
+                [/\b(line|local|game|save|Param|I|L|G|S)\b/, "scope"],
 
-                { regex: /[A-Za-z_][A-Za-z0-9_]*/, token: "variable" }
+                [/-?(?:\d*\.\d+|\d+)/, "number"],
+
+                [/[\{\}\(\)\[\]]/, "@brackets"],
+
+                [/%(default|uuid|selected|damager|killer|shooter|victim|projectile)/, "%code"],
+                [/%(random|round|index|entry|var|math)(?=\(.*\))/, "%code"],
+
+                [/[A-Za-z0-9_%@\.·\-]+(?=\s*[%+\-=;,:)])/, "variable"],
+
+                [/;/, "delimiter"]
             ]
-            });
+        }
+    });
 
-    </script>
+    monaco.editor.defineTheme("pseudodf-dark", {
+        base: "vs-dark",
+        inherit: true,
+        rules: [
+            { token: "string", foreground: "c0ff61" },
+            { token: "comment", foreground: "AAAAAA", fontStyle: "italic" },
+            { token: "type", foreground: "FFA358" },
+            { token: "block", foreground: "417DFF" },
+            { token: "number", foreground: "F1FF70" },
+            { token: "keyword", foreground: "FF7DD8" },
+            { token: "%code", foreground: "ffe68c" },
+            { token: "variable", foreground: "66f2ff" },
+            { token: "scope", foreground: "81e1a7" },
+            { token: "function", foreground: "41B3FF" },
+            { token: "target", foreground: "A6C2FF" }
+        ],
+        colors: {
+            "editor.foreground": "#ffffff",
+            "editor.background": "#1e1e1e",
 
-    <script>
+            "editorBracketHighlight.foreground1": "#c7fffc",
+            "editorBracketHighlight.foreground4": "#c7c9ff",
+            "editorBracketHighlight.foreground2": "#f9c7ff",
+            "editorBracketHighlight.foreground5": "#ffecc7",
+            "editorBracketHighlight.foreground3": "#fdffc7",
+            "editorBracketHighlight.foreground6": "#c7ffd4",
 
-        const editor = CodeMirror(document.getElementById("outputContainer"), {
-            value: "// Output here",
-            mode: "pseudodf",
-            theme: "material-darker",
-            lineNumbers: true,
-            lineWrapping: false  
+            "editorBracketHighlight.unexpectedBracket.foreground": "#FF5555"
+        }
         });
 
-        function procesar() {
-            const text = document.getElementById("input").value;
+    window.editor = monaco.editor.create(
+        document.getElementById("editorContainer"),
+            {
+                value: "// Output will be here",
+                language: "pseudodf",
+                theme: "pseudodf-dark",
+                automaticLayout: true,
 
-            const resultado = `${process_all(text)}`;
+                bracketPairColorization: { enabled: true },
 
-            editor.setValue(resultado); 
-        }
-    </script>
+                guides: { bracketPairs: true, highlightActiveBracketPair: false },
+
+                fontFamily: "Consolas, monospace",
+                fontSize: 14,
+                lineHeight: 22,
+                minimap: { enabled: true }
+            }
+    );
+});
+
+function process() {
+    const text = document.getElementById("input").value;
+
+    const resultado =
+        "// Code processed successfully\n" +
+        "// You can edit it before sharing it\n\n" +
+        process_all(text);
+
+    editor.setValue(resultado);
+}
+</script>
 
 </body>
-
 </html>
