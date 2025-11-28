@@ -1,3 +1,5 @@
+// TODO: Not arrow
+
 'use strict';
 
 function base64ToUint8Array(base64) {
@@ -50,21 +52,28 @@ function json_to_pseudo_df(code) {
     let indentation = 1;
 
     for (const block of blocks) {
-        if (block.id === 'block') {
-            string_code += '\n' + ' '.repeat(indentation * 4) + process_block(block) + ';';
-        } else if (block.id === 'bracket') {
-            if (block.direct === 'open') {
-                indentation += 1;
-
-                string_code = string_code.slice(0, -1);
-                string_code += ' {';
-            } else {
-                indentation -= 1;
-                if (indentation < 0) indentation = 0;
-                string_code += '\n' + ' '.repeat(indentation * 4) + '}';
+        try {
+            if (block.id === 'block') {
+                string_code += '\n' + ' '.repeat(indentation * 4) + process_block(block) + ';';
             }
-        } else {
-            throw new Error('NOT A BLOCK NOR A BRACKET!');
+            else if (block.id === 'bracket') {
+                if (block.direct === 'open') {
+                    indentation += 1;
+
+                    string_code = string_code.slice(0, -1);
+                    string_code += ' {';
+                } else {
+                    indentation -= 1;
+                    if (indentation < 0) indentation = 0;
+                    string_code += '\n' + ' '.repeat(indentation * 4) + '}';
+                }
+            }
+            else {
+                throw new Error('Block id was not "block" and was not "bracket"');
+            }
+        }
+        catch (e) {
+            string_code += '\n' + ' '.repeat(indentation * 4) + 'UNABLE_TO_PROCESS_CODEBLOCK';
         }
     }
 
@@ -158,7 +167,7 @@ function process_args_and_tags(args, tags) {
 
 function process_value(value) {
     if (!value || !value.id) {
-        console.log('UNABLE_TO_PROCESS_VALUE');
+        console.error('UNABLE_TO_PROCESS_VALUE:', value);
         return 'UNABLE_TO_PROCESS_VALUE';
     }
 
@@ -234,7 +243,8 @@ function process_value(value) {
     function pn_el(value) {
         const default_value = (value.data.default_value) ? (` = ${process_value(value.data.default_value)}`) : ('');
         const mapping = {'txt':'str', 'comp':'txt', 'part':'par'};
-        return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${mapping[value.data.type] || value.data.type}${default_value}`; 
+        const type = mapping[value.data.type] || value.data.type;
+        return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${type.charAt(0).toUpperCase() + type.slice(1)}${default_value}`; 
     }
     function bl_tag(value) {
         return `Tag("${value.data.tag}"="${value.data.option}")`;
@@ -275,10 +285,10 @@ function process_value(value) {
         try {
             return value_processors[value_type](value);
         } catch (e) {
-            console.log('ERROR PROCESSING VALUE:', e);
+            console.error('ERROR PROCESSING VALUE:', e);
         }
     } else {
-        console.log('UNABLE_TO_PROCESS_VALUE: unknown type', value_type);
+        console.error('UNABLE_TO_PROCESS_VALUE: unknown type', value_type);
     }
     return 'UNABLE_TO_PROCESS_VALUE';
 }
@@ -327,7 +337,6 @@ function code_block_name(code_block) {
 
 function custom_code_action_sintax(block_type, block_action, args, tags) {
     if (block_type === 'set_var') {
-        console.log(args);
         if (!args || args.length === 0) {
             return `EmptyChestSlot = ${block_action}()`;
         }
