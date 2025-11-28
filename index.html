@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>PseudoDF</title>
+
+    <!-- ICON -->
     <!-- <link rel="icon" type="image/png" href="icon.png"> -->
 
     <style>
@@ -13,11 +15,12 @@
         }
 
         textarea {
-            width: 100%;
+            width: 30%;
             height: 200px;
-            margin-bottom: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 10px;
             padding: 10px;
         }
 
@@ -35,37 +38,46 @@
         }
     </style>
 
-    <script>
-        let TAGS_FILE = null;
-        fetch("tags.json")
-            .then(r => r.json())
-            .then(json => {
-                TAGS_FILE = json;
-                console.log("TAGS_FILE cargado:", TAGS_FILE);
-                document.getElementById("processBtn").disabled = false;
-            })
-            .catch(err => console.error("Error cargando tags.json:", err));
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script src="script.js"></script>
 </head>
-
 <body>
 
 <h1>PseudoDF</h1>
 
 <h3>Input:</h3>
-<textarea id="input" placeholder="Enter NBT data"></textarea>
 
-<button id="processBtn" onclick="process()">Process</button>
+<div id="inputs-container">
+</div>
+
+<br>
+<button id="processBtn" onclick="processAllCode()" disabled>Process</button>
 
 <h3>Output:</h3>
-
 <div id="editorContainer"></div>
 
+<!-- External libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
+<!-- Load user code AFTER Monaco exists -->
+<script src="script.js"></script>
+
 <script>
+// --------------------------------------------------------
+// Load tags.json
+// --------------------------------------------------------
+fetch("tags.json")
+    .then(r => r.json())
+    .then(json => {
+        window.TAGS_FILE = json;
+        console.log("TAGS_FILE loaded:", TAGS_FILE);
+        processBtn.disabled = false;
+    })
+    .catch(err => console.error("Error loading tags.json:", err));
+
+
+// --------------------------------------------------------
+// Initialize Monaco
+// --------------------------------------------------------
 require.config({
     paths: {
         vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
@@ -98,10 +110,11 @@ require(["vs/editor/editor.main"], function () {
         ],
         tokenizer: {
             root: [
-                [/".*?"/, "string"],
-                [/'.*?'/, "string"],
-
+                [/\/\*.*?\*\//, "comment"],
                 [/\/\/.*$/, "comment"],
+
+                [/"(?:[^"\\]|\\.)*"/, "string"],
+                [/'(?:[^'\\]|\\.)*'/, "string"],
 
                 [/\b(Loc|Vec|Snd|Par|Pot|GVal|Tag|Item|FunctionHint)(?=\()/, "type"],
 
@@ -110,9 +123,12 @@ require(["vs/editor/editor.main"], function () {
                 [/\b(if|else)\b/, "block"],
 
                 [/\b(Function|Process|PlayerEvent|EntityEvent)\b/, "keyword"],
+                
+                [/\b(str|txt|num|loc|vec|snd|par|pot|var|list|dict)\b/, "keyword"],
+                [/\b(optional|plural)\b/, "keyword"],
 
-                [/(\.)([A-Za-z_][A-Za-z0-9_]*)/, ["delimiter", "function"]],
-                [/\b[A-Za-z_][A-Za-z0-9_]*(?=\s*\()/, "function"],
+                [/(\.)([A-Za-z0-9_·@\-]+)/, ["delimiter", "function"]],
+                [/\b[A-Za-z0-9_·@\-]+(?=\s*\()/, "function"],
 
                 [/\b([A-Za-z])*(?=:)/, "target"],
 
@@ -125,7 +141,7 @@ require(["vs/editor/editor.main"], function () {
                 [/%(default|uuid|selected|damager|killer|shooter|victim|projectile)/, "%code"],
                 [/%(random|round|index|entry|var|math)(?=\(.*\))/, "%code"],
 
-                [/[A-Za-z0-9_%@\.·\-]+(?=\s*[%+\/=;,:<>)\-])/, "variable"],
+                [/[A-Za-z0-9_@\.·\-]+(?=\s*[%+\/=;,:<>)\-])/, "variable"],
 
                 [/;/, "delimiter"]
             ]
@@ -178,20 +194,73 @@ require(["vs/editor/editor.main"], function () {
                 fontFamily: "Consolas, monospace",
                 fontSize: 14,
                 lineHeight: 22,
-                minimap: { enabled: true }
+                minimap: { enabled: false }
             }
     );
 });
 
-function process() {
-    const text = document.getElementById("input").value;
 
-    const resultado =
-        "// Code processed successfully\n" +
-        "// You can edit it before sharing it\n\n" +
-        process_all(text);
+// --------------------------------------------------------
+// PROCESS FUNCTION
+// --------------------------------------------------------
+let inputs = [];
 
-    editor.setValue(resultado);
+function createInputBox() {
+    const container = document.getElementById("inputs-container");
+
+    const box = document.createElement("textarea");
+    box.placeholder = "Enter NBT data";
+
+    container.appendChild(box);
+    inputs.push(box);
+
+    box.addEventListener("input", () => {
+        const isLast = inputs[inputs.length - 1] === box;
+        const hasText = box.value.trim().length > 0;
+        if (isLast && hasText) {
+            createInputBox();
+            return;
+        }
+
+        const index = inputs.indexOf(box);
+        const nextBox = inputs[index + 1];
+        const nextEmpty = nextBox.value.length === 0;
+        if (!hasText && !isLast && nextEmpty) {
+            removeInputBox(nextBox);
+        }
+    });
+}
+
+function removeInputBox(box) {
+    const index = inputs.indexOf(box);
+    inputs.splice(index, 1);
+    box.remove();
+}
+
+createInputBox();
+
+
+
+function processAllCode() {
+    const boxes = inputs;
+
+    let output = '';
+
+    for (let box of boxes) {
+        const text = box.value;
+        const processed = process_all(text);
+        output += '\n\n' + processed;
+    }
+    
+    console.log(boxes);
+    console.log(output);
+
+    if (output.trim() === '') {
+        editor.setValue('// An error occoured\n// Please make sure all inputs are valid\n// Check the console for more info');
+        return;
+    }
+
+    editor.setValue("// Code processed successfully\n// You can edit it before sharing it" + output);
 }
 </script>
 
