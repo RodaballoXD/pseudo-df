@@ -36,7 +36,7 @@ function get_base64_code(string) {
 
 
 function legalName(str) {
-    str = str.replaceAll(' ', '_');
+    str = str.replaceAll(' ', '-').replaceAll('.', '·');
     return str;
 }
 
@@ -167,12 +167,15 @@ function process_value(value) {
         if (!formatted.includes('.')) formatted = `${formatted}.0`;
         return formatted;
     }
+    function properString(str, strChar) {
+        return str.replaceAll(strChar, `\\${strChar}`).replaceAll('\n', '<newline>')
+    }
     
     function txt(value) {
-        return `'${String(value.data.name).replace(/'/g, "\\'")}'`;
+        return `'${properString(value.data.name, "'")}'`;
     }
     function comp(value) {
-        return `"${String(value.data.name).replace(/"/g, '\\"')}"`;
+        return `"${properString(value.data.name, '"')}"`;
     }
     function num(value) {
         return String(value.data.name);
@@ -230,7 +233,7 @@ function process_value(value) {
     }
     function pn_el(value) {
         const default_value = (value.data.default_value) ? (` = ${process_value(value.data.default_value)}`) : ('');
-        const mapping = {'txt':'str', 'comp':'txt'};
+        const mapping = {'txt':'str', 'comp':'txt', 'part':'par'};
         return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${mapping[value.data.type] || value.data.type}${default_value}`; 
     }
     function bl_tag(value) {
@@ -378,20 +381,27 @@ function custom_code_action_sintax(block_type, block_action, args, tags) {
 }
 
 function process_all(original_nbt_data) {
-    console.log(`PARSING:\n${original_nbt_data}\n`);
+    if (original_nbt_data.trim() === '') return '';
+    try {    
+        console.log(`PARSING:\n${original_nbt_data}\n`);
 
-    const base64_code = get_base64_code(original_nbt_data);
-    console.log(`CODE DATA:`);
-    console.log(base64_code);
+        const base64_code = get_base64_code(original_nbt_data);
+        console.log(`CODE DATA:`);
+        console.log(base64_code);
 
-    const json_code = base64_to_json(base64_code);
-    console.log(`CODE AS JSON:`);
-    console.log(json_code);
+        const json_code = base64_to_json(base64_code);
+        console.log(`CODE AS JSON:`);
+        console.log(json_code);
 
-    const processed = json_to_pseudo_df(json_code);
-    console.log(`SUCCESSFUL! PARSED CODE:`);
-    console.log(processed);
+        const processed = json_to_pseudo_df(json_code);
+        console.log(`SUCCESSFUL! PARSED CODE:`);
+        console.log(processed);
 
-    return processed;
+        return processed;
+    }
+    catch (e) {
+        console.error(e);
+        return '';
+    }
 }
 
