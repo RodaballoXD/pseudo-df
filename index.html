@@ -29,12 +29,48 @@
             font-size: 16px;
             cursor: pointer;
             margin-bottom: 15px;
+            margin-right: 15px;
         }
 
         #editorContainer {
             width: 100%;
             height: 800px;
             border: 1px solid #444;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 1.0rem;
+
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity .2s ease;
+            
+            background: #222;
+            border: 1px solid #444;
+            color: #ddd;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-align: left;
+
+            position: fixed;
+            top: 10%;
+            left: 5%;
+            transform: translateX(0%);
+            max-width: calc(100vw - 20px);
+            box-sizing: border-box;
+            z-index: 999;
+        }
+
+        .tooltip:hover .tooltip-text {
+            top: calc(var(--tooltip-top) + 10px);
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 
@@ -43,275 +79,64 @@
 
 <h1>PseudoDF</h1>
 
-<h3>Input:</h3>
+<!-- TODO -->
+<h3>
+    Input:
+    <div class="tooltip">
+        🛈
+        <span class="tooltip-text">
+            To import DiamondFire code, get the NBT data of as many templates as you want, paste them into the input boxes and click <b>Process Code</b><br>
+            <br>
+            In order to get the NBT data from DiamondFire:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;- Look at a Function, Process or Event block<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;- Shift + Right Click to get an item<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;- Hold the item and do <b>/i nbt</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;- Copy the data from the chat
+        </span>
+    </div>
+</h3>
+
+
 
 <div id="inputs-container">
 </div>
 
 <br>
-<button id="processBtn" onclick="processAllCode()" disabled>Process</button>
+<button id="processBtn" onclick="processAllCode()" disabled>Process Code</button>
+<button onclick="shareAndCopy()">Share as Link</button>
+<button onclick="copyCode()">Copy Code</button>
+
 
 <h3>Output:</h3>
 <div id="editorContainer"></div>
 
-<!-- External libraries -->
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-<!-- Load user code AFTER Monaco exists -->
 <script src="script.js"></script>
+<script src="load_tags.js"></script>
+<script src="monaco_editor.js"></script>
+<script src="input_boxes_handler.js"></script>
+<script src="link_handler.js"></script>
 
 <script>
-// --------------------------------------------------------
-// Load tags.json
-// --------------------------------------------------------
-fetch("tags.json")
-    .then(r => r.json())
-    .then(json => {
-        window.TAGS_FILE = json;
-        console.log("TAGS_FILE loaded:", TAGS_FILE);
-        processBtn.disabled = false;
-    })
-    .catch(err => console.error("Error loading tags.json:", err));
-
-
-// --------------------------------------------------------
-// Initialize Monaco
-// --------------------------------------------------------
-require.config({
-    paths: {
-        vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
-    }
+document.querySelectorAll('.tooltip').forEach(tip => {
+    tip.addEventListener('mouseenter', () => {
+        const rect = tip.getBoundingClientRect();
+        tip.style.setProperty('--tooltip-top', rect.bottom + 'px');
+    });
 });
-
-require(["vs/editor/editor.main"], function () {
-    monaco.languages.register({ id: "pseudodf" });
-
-    monaco.languages.setLanguageConfiguration("pseudodf", {
-        brackets: [
-            ['{', '}'],
-            ['[', ']'],
-            ['(', ')']
-        ],
-        autoClosingPairs: [
-            { open: '{', close: '}' },
-            { open: '[', close: ']' },
-            { open: '(', close: ')' },
-            { open: '"', close: '"' },
-            { open: "'", close: "'" }
-        ]
-    });
-
-    monaco.languages.setMonarchTokensProvider("pseudodf", {
-        brackets: [
-            { open: '{', close: '}', token: 'delimiter.curly' },
-            { open: '[', close: ']', token: 'delimiter.bracket' },
-            { open: '(', close: ')', token: 'delimiter.parenthesis' }
-        ],
-        tokenizer: {
-            root: [
-                [/\/\*.*?\*\//, "comment"],
-                [/\/\/.*$/, "comment"],
-
-                [/"(?:[^"\\]|\\.)*"/, "kwTxt"],
-                [/'(?:[^'\\]|\\.)*'/, "kwStr"],
-
-                [/\bStr\b/, "kwStr"],
-                [/\bTxt\b/, "kwTxt"],
-                [/\bNum\b/, "kwNum"],
-                [/\bLoc\b/, "kwLoc"],
-                [/\bVec\b/, "kwVec"],
-                [/\bSnd\b/, "kwSnd"],
-                [/\bPar\b/, "kwPar"],
-                [/\bPot\b/, "kwPot"],
-                [/\bGVal\b/, "kwGVal"],
-                [/\bItem\b/, "kwItem"],
-                [/\bParam\b/, "kwParam"],
-                [/\bTag\b/, "kwTag"],
-                [/\bsave\b/, "kwsave"],
-                [/\bgame\b/, "kwgame"],
-                [/\blocal\b/, "kwlocal"],
-                [/\bline\b/, "kwline"],
-                [/\bFunction\b/, "kwFunction"],
-                [/\bPlayerEvent\b/, "kwPlayerEvent"],
-                [/\bEntityEvent\b/, "kwEntityEvent"],
-                [/\bProcess\b/, "kwProcess"],
-
-                [/\bPlayer\b/, "kwPlayer"],
-                [/\bifPlayer\b/, "kwifPlayer"],
-                [/\bEntity\b/, "kwEntity"],
-                [/\bifEntity\b/, "kwifEntity"],
-                [/\bSet\b/, "kwSet"],
-                [/\bifVar\b/, "kwifVar"],
-                [/\bGame\b/, "kwGame"],
-                [/\bifGame\b/, "kwifGame"],
-                [/\bRepeat\b/, "kwRepeat"],
-                [/\bControl\b/, "kwControl"],
-                [/\bStart\b/, "kwStart"],
-                [/\bCall\b/, "kwCall"],
-                [/\bSelect\b/, "kwSelect"],
-
-                [/\belse\b/, "kwelse"],
-                [/\bif\b/, "kwifVar"],
-
-                [/\b(optional|plural)\b/, "keyword"],
-
-                [/(\.)([A-Za-z0-9_·@\-]+)/, ["delimiter", "function"]],
-                [/\b[A-Za-z0-9_·@\-]+(?=\s*\()/, "function"],
-
-                [/\b([A-Za-z])*(?=:)/, "target"],
-
-                [/-?(?:\d*\.\d+|\d+)/, "kwNum"],
-
-                [/[\{\}\(\)\[\]]/, "@brackets"],
-
-                [/%(default|uuid|selected|damager|killer|shooter|victim|projectile)/, "%code"],
-                [/%(random|round|index|entry|var|math)(?=\(.*\))/, "%code"],
-
-                [/[A-Za-z0-9_@\.·\-]+(?=\s*[%+\/=;,:<>)\-])/, "variable"],
-
-                [/;/, "delimiter"]
-            ]
-        }
-    });
-
-    monaco.editor.defineTheme("pseudodf-dark", {
-        base: "vs-dark",
-        inherit: true,
-        rules: [
-            { token: "kwStr",   foreground: "#6CEFEF" },
-            { token: "kwTxt",   foreground: "#83DA2B" },
-            { token: "kwNum",   foreground: "#D98888" },
-            { token: "kwLoc",   foreground: "#4ED54E" },
-            { token: "kwVec",   foreground: "#2afca8" },
-            { token: "kwSnd",   foreground: "#6969F0" },
-            { token: "kwPar",   foreground: "#995BD7" },
-            { token: "kwPot",   foreground: "#CA5773" },
-            { token: "kwGVal",   foreground: "#D6AB58" },
-            { token: "kwItem",   foreground: "#E2B460" },
-            { token: "kwParam",   foreground: "#a8fca8" },
-            { token: "kwTag",   foreground: "#E2E242" },
-            { token: "kwsave",   foreground: "#DCDC35" },
-            { token: "kwgame",   foreground: "#CFB9AD" },
-            { token: "kwlocal",   foreground: "#8CE38C" },
-            { token: "kwline",   foreground: "#54a8fc" },
-
-            { token: "kwFunction",  foreground: "#4185FE" },
-            { token: "kwPlayerEvent",  foreground: "#82F9EA" },
-            { token: "kwEntityEvent",  foreground: "#E2B306" },
-            { token: "kwProcess",  foreground: "#01ED48" },
-            { token: "kwPlayer",  foreground: "#CF8C04" },
-            { token: "kwifPlayer",  foreground: "#D3AD66" },
-            { token: "kwEntity",  foreground: "#80D218" },
-            { token: "kwifEntity",  foreground: "#D17B68" },
-            { token: "kwSet",  foreground: "#E2E2E2" },
-            { token: "kwifVar",  foreground: "#A461FF" },
-            { token: "kwGame",  foreground: "#D37272" },
-            { token: "kwifGame",  foreground: "#991014" },
-            { token: "kwRepeat",  foreground: "#58E2C5" },
-            { token: "kwControl",  foreground: "#8086CC" },
-            { token: "kwStart",  foreground: "#3AFF75" },
-            { token: "kwCall",  foreground: "#4478DE" },
-            { token: "kwSelect",  foreground: "#E29CE2" },
-
-            { token: "kwelse",         foreground: "#e4eab9" },
-
-            { token: "comment",   foreground: "#AAAAAA" },
-            { token: "number",   foreground: "#F1FF70" },
-            { token: "keyword",   foreground: "#FF7DD8" },
-            { token: "%code",   foreground: "#ffe68c" },
-            { token: "variable",   foreground: "#9cd9f1" },
-            { token: "function",   foreground: "#dcdc9d" },
-            { token: "target",   foreground: "#63B763" }
-        ],
-        colors: {
-            "editor.foreground": "#ffffff",
-            "editor.background": "#1e1e1e",
-
-            "editorBracketHighlight.foreground1": "#c7fffc",
-            "editorBracketHighlight.foreground4": "#c7c9ff",
-            "editorBracketHighlight.foreground2": "#f9c7ff",
-            "editorBracketHighlight.foreground5": "#ffecc7",
-            "editorBracketHighlight.foreground3": "#fdffc7",
-            "editorBracketHighlight.foreground6": "#c7ffd4",
-
-            "editorBracketHighlight.unexpectedBracket.foreground": "#FF5555"
-        }
-        });
-
-    window.editor = monaco.editor.create(
-        document.getElementById("editorContainer"),
-            {
-                value: "// Output will be here",
-                language: "pseudodf",
-                theme: "pseudodf-dark",
-                automaticLayout: true,
-
-                bracketPairColorization: { enabled: true },
-
-                guides: { bracketPairs: true, highlightActiveBracketPair: false },
-
-                fontFamily: "Consolas, monospace",
-                fontSize: 14,
-                lineHeight: 22,
-                minimap: { enabled: false }
-            }
-    );
-});
-
-
-// --------------------------------------------------------
-// PROCESS FUNCTION
-// --------------------------------------------------------
-let inputs = [];
-
-function createInputBox() {
-    const container = document.getElementById("inputs-container");
-
-    const box = document.createElement("textarea");
-    box.placeholder = "Enter NBT data";
-
-    container.appendChild(box);
-    inputs.push(box);
-
-    box.addEventListener("input", () => {
-        const isLast = inputs[inputs.length - 1] === box;
-        const hasText = box.value.trim().length > 0;
-        if (isLast && hasText) {
-            createInputBox();
-            return;
-        }
-
-        const index = inputs.indexOf(box);
-        const nextBox = inputs[index + 1];
-        const nextEmpty = nextBox.value.length === 0;
-        if (!hasText && !isLast && nextEmpty) {
-            removeInputBox(nextBox);
-        }
-    });
-}
-
-function removeInputBox(box) {
-    const index = inputs.indexOf(box);
-    inputs.splice(index, 1);
-    box.remove();
-}
-
-createInputBox();
-
-
 
 function processAllCode() {
     const boxes = inputs;
-
     let output = '';
-
     for (let box of boxes) {
         const text = box.value;
         const processed = process_all(text);
         output += '\n\n' + processed;
     }
-    
     console.log(boxes);
     console.log(output);
 
@@ -321,6 +146,12 @@ function processAllCode() {
     }
 
     editor.setValue("// Code processed successfully\n// You can edit it before sharing it" + output);
+}
+
+async function copyCode() {
+    const code = editor.getValue();
+    await navigator.clipboard.writeText(code);
+    showCopiedToast("Code copied to clipboard");
 }
 </script>
 
