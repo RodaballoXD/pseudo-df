@@ -21,6 +21,11 @@ function showCopiedToast(text, time=1200) {
 
 async function shareAndCopy() {
     const code = editor.getValue();
+    const messages = Object.keys(codeMessages).map(function(key){ return codeMessages[key]; });
+    if (messages.includes(code.trim())) {
+        editor.setValue(codeMessages.processCode);
+        return;
+    }
     const compressed = pako.gzip(code);
     const b64 = btoa(String.fromCharCode(...compressed));
     const url = location.origin + location.pathname + "#code=" + b64;

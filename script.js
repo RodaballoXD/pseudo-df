@@ -45,11 +45,18 @@ function legalName(str) {
 
 
 function json_to_pseudo_df(code) {
-    const blocks = Array.from(code.blocks); 
+    const blocks = Array.from(code.blocks);
     if (blocks.length === 0) return '';
     const first = blocks.shift();
-    let string_code = handle_line_starter(first) + ' {';
+    let string_code = '';
+    try {
+        string_code = handle_line_starter(first) + ' {';
+    } catch (e) {
+        string_code = 'UNABLE_TO_PROCESS_LINE_STARTER {';
+        blocks.unshift(first);
+    }
     let indentation = 1;
+    
 
     for (const block of blocks) {
         try {
@@ -92,11 +99,13 @@ function process_block(block) {
     else if (Object.prototype.hasOwnProperty.call(block, 'data')) block_action = block.data.trim();
     else throw new Error('Not action nor data!!');
 
+    let attribute = (Object.prototype.hasOwnProperty.call(block, 'attribute')) ? block.attribute.toLowerCase() : '';
+
     const chest_contents = block.args && block.args.items ? block.args.items : [];
     const args = chest_contents.filter(i => i.item && i.item.id !== 'bl_tag');
     const tags = chest_contents.filter(i => i.item && i.item.id === 'bl_tag');
 
-    const custom_sintax = custom_code_action_sintax(block_type, block_action, args, tags);
+    const custom_sintax = custom_code_action_sintax(block_type, block_action, args, tags, attribute);
     if (custom_sintax) {
         return custom_sintax;
     }
@@ -116,8 +125,12 @@ function process_block(block) {
     if (Object.prototype.hasOwnProperty.call(block, 'subAction')) {
         sub_action = `.${block.subAction}`;
     }
+    
+    if (attribute) {
+        attribute = `.${block.attribute}`;
+    }
 
-    return `${target}${action}${sub_action}(${values_str})`;
+    return `${target}${action}${attribute}${sub_action}(${values_str})`;
 }
 
 function handle_line_starter(block) {
@@ -179,7 +192,7 @@ function process_value(value) {
     function properString(str, strChar) {
         return str.replaceAll(strChar, `\\${strChar}`).replaceAll('\n', '<newline>')
     }
-    
+
     function txt(value) {
         return `'${properString(value.data.name, "'")}'`;
     }
@@ -211,7 +224,7 @@ function process_value(value) {
     }
     function part(value) {
         const cluster_data = value.data.cluster;
-        const amount = (cluster_data.amount !== 1) ? `, amount=${cluster_data.amount}` : '' ;
+        const amount = (cluster_data.amount !== 1) ? `, amount=${cluster_data.amount}` : '';
         const spread = (cluster_data.horizontal === 0 && cluster_data.vertical === 0) ? '' : `, spread=(${cluster_data.horizontal},${cluster_data.vertical})`;
 
         const other_data = value.data.data;
@@ -219,12 +232,12 @@ function process_value(value) {
         for (let i in other_data) {
             processed_data += (i === 'rgb') ? `, color="#${other_data[i].toString(16)}"` : `, ${i}="${other_data[i]}"`;
         }
-        return `Par("${value.data.particle}"${amount}${spread}${processed_data})`; 
+        return `Par("${value.data.particle}"${amount}${spread}${processed_data})`;
     }
     function pot(value) {
         const amplifier = (value.data.amp !== 0) ? `, amp=${value.data.amp + 1}` : '';
         const duration = (value.data.dur !== 1000000) ? `, dur=${value.data.dur}` : ''; // TODO: MM:SS format
-        return `Pot("${value.data.pot}"${amplifier}${duration})`; 
+        return `Pot("${value.data.pot}"${amplifier}${duration})`;
     }
     function variable(value) {
         const scopes = {
@@ -242,9 +255,9 @@ function process_value(value) {
     }
     function pn_el(value) {
         const default_value = (value.data.default_value) ? (` = ${process_value(value.data.default_value)}`) : ('');
-        const mapping = {'txt':'str', 'comp':'txt', 'part':'par'};
+        const mapping = { 'txt': 'str', 'comp': 'txt', 'part': 'par' };
         const type = mapping[value.data.type] || value.data.type;
-        return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${type.charAt(0).toUpperCase() + type.slice(1)}${default_value}`; 
+        return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${type.charAt(0).toUpperCase() + type.slice(1)}${default_value}`;
     }
     function bl_tag(value) {
         return `Tag("${value.data.tag}"="${value.data.option}")`;
@@ -335,7 +348,7 @@ function code_block_name(code_block) {
     return names[code_block] || code_block;
 }
 
-function custom_code_action_sintax(block_type, block_action, args, tags) {
+function custom_code_action_sintax(block_type, block_action, args, tags, attribute) {
     if (block_type === 'set_var') {
         if (!args || args.length === 0) {
             return `EmptyChestSlot = ${block_action}()`;
@@ -370,7 +383,8 @@ function custom_code_action_sintax(block_type, block_action, args, tags) {
         if (args.length === 2 && ['=', '!=', '<', '>', '<=', '>='].includes(block_action)) {
             let op = block_action;
             if (op === '=') op = '==';
-            return `if (${process_value(args[0].item)} ${op} ${process_value(args[1].item)})`;
+            if (attribute) attribute = `${attribute} `;
+            return `if ${attribute}(${process_value(args[0].item)} ${op} ${process_value(args[1].item)})`;
         }
         const replacers = {
             '=': 'Equals',
@@ -382,8 +396,10 @@ function custom_code_action_sintax(block_type, block_action, args, tags) {
         };
         if (Object.prototype.hasOwnProperty.call(replacers, block_action)) block_action = replacers[block_action];
 
+        if (attribute) attribute = `.${attribute}`;
+
         const values_str = process_args_and_tags(args, tags).join(', ');
-        return `ifVar.${block_action}(${values_str})`;
+        return `ifVar.${block_action}${attribute}(${values_str})`;
     }
 
     return null;
@@ -391,7 +407,7 @@ function custom_code_action_sintax(block_type, block_action, args, tags) {
 
 function process_all(original_nbt_data) {
     if (original_nbt_data.trim() === '') return '';
-    try {    
+    try {
         console.log(`PARSING:\n${original_nbt_data}\n`);
 
         const base64_code = get_base64_code(original_nbt_data);

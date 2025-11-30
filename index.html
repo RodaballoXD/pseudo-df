@@ -79,7 +79,6 @@
 
 <h1>PseudoDF</h1>
 
-<!-- TODO -->
 <h3>
     Input:
     <div class="tooltip">
@@ -115,12 +114,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-<script src="script.js"></script>
-<script src="load_tags.js"></script>
-<script src="monaco_editor.js"></script>
-<script src="input_boxes_handler.js"></script>
-<script src="link_handler.js"></script>
-
 <script>
 document.querySelectorAll('.tooltip').forEach(tip => {
     tip.addEventListener('mouseenter', () => {
@@ -129,6 +122,12 @@ document.querySelectorAll('.tooltip').forEach(tip => {
     });
 });
 
+codeMessages = {
+    default: '// Output will be here',
+    error: '// An error occoured\n// Please make sure all inputs are valid\n// Check the console for more info',
+    success: '// Code processed successfully\n// You can edit it before sharing it',
+    processCode: '// Error\n// Paste NBT data and process it before sharing'
+};
 function processAllCode() {
     const boxes = inputs;
     let output = '';
@@ -141,11 +140,11 @@ function processAllCode() {
     console.log(output);
 
     if (output.trim() === '') {
-        editor.setValue('// An error occoured\n// Please make sure all inputs are valid\n// Check the console for more info');
+        editor.setValue(codeMessages.error);
         return;
     }
 
-    editor.setValue("// Code processed successfully\n// You can edit it before sharing it" + output);
+    editor.setValue(codeMessages.success + output);
 }
 
 async function copyCode() {
@@ -154,6 +153,12 @@ async function copyCode() {
     showCopiedToast("Code copied to clipboard");
 }
 </script>
+
+<script src="script.js"></script>
+<script src="load_tags.js"></script>
+<script src="monaco_editor.js"></script>
+<script src="input_boxes_handler.js"></script>
+<script src="link_handler.js"></script>
 
 </body>
 </html>

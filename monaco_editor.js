@@ -73,6 +73,7 @@ require(["vs/editor/editor.main"], function () {
 
                 [/\belse\b/, "kwelse"],
                 [/\bif\b/, "kwifVar"],
+                [/(\.|^|[\s;])(not)\b/, ["delimiter", "kwnot"]],
 
                 [/\b(optional|plural)\b/, "keyword"],
 
@@ -135,6 +136,7 @@ require(["vs/editor/editor.main"], function () {
             { token: "kwSelect",  foreground: "#E29CE2" },
 
             { token: "kwelse",         foreground: "#e4eab9" },
+            { token: "kwnot",         foreground: "#b86800ff" },
 
             { token: "comment",   foreground: "#AAAAAA" },
             { token: "number",   foreground: "#F1FF70" },
@@ -162,7 +164,7 @@ require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(
         document.getElementById("editorContainer"),
             {
-                value: "// Output will be here",
+                value: codeMessages.default,
                 language: "pseudodf",
                 theme: "pseudodf-dark",
                 automaticLayout: true,
