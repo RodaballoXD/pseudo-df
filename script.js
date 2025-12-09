@@ -1,6 +1,6 @@
-// TODO: Not arrow
-
 'use strict';
+
+settings = {};
 
 function base64ToUint8Array(base64) {
     base64 = base64.replace(/-/g, '+').replace(/_/g, '/');
@@ -16,7 +16,7 @@ function base64ToUint8Array(base64) {
 }
 
 
-function base64_to_json(string) {
+function base64ToJson(string) {
     const decodedBytes = base64ToUint8Array(string);
     const decompressed = pako.ungzip(decodedBytes, {
         to: 'string'
@@ -24,7 +24,7 @@ function base64_to_json(string) {
     return JSON.parse(decompressed);
 }
 
-function get_base64_code(string) {
+function getBase64Code(string) {
     const needle = 'H4sIA';
     const startIndex = string.indexOf(needle);
     const trimmedStart = string.slice(startIndex);
@@ -37,22 +37,28 @@ function get_base64_code(string) {
 
 
 
-function legalName(str) {
-    str = str.replaceAll(' ', '-').replaceAll('.', '·');
+function legalName(str, cannotAlwaysEncapsulate) {
+    if (!window.settings.keepVariableNameSpaces) {
+        str = str.replaceAll(' ', '-').replaceAll('.', '·');
+    }
+    if ((window.settings.encapsulateAllNames && !cannotAlwaysEncapsulate) || /[%\+\/=;,:<>`\s]/.test(str)) {
+        str = '`' + str.replaceAll('`', '\\`') + '`';
+    }
     return str;
 }
 
 
 
-function json_to_pseudo_df(code) {
+function jsonToPseudoDf(code) {
     const blocks = Array.from(code.blocks);
     if (blocks.length === 0) return '';
     const first = blocks.shift();
-    let string_code = '';
+    let stringCode = '';
     try {
-        string_code = handle_line_starter(first) + ' {';
+        stringCode = handleLineStarter(first) + ' {';
     } catch (e) {
-        string_code = 'UNABLE_TO_PROCESS_LINE_STARTER {';
+        console.error(e);
+        stringCode = 'UNABLE_TO_PROCESS_LINE_STARTER {';
         blocks.unshift(first);
     }
     let indentation = 1;
@@ -61,18 +67,18 @@ function json_to_pseudo_df(code) {
     for (const block of blocks) {
         try {
             if (block.id === 'block') {
-                string_code += '\n' + ' '.repeat(indentation * 4) + process_block(block) + ';';
+                stringCode += '\n' + ' '.repeat(indentation * 4) + processBlock(block) + ';';
             }
             else if (block.id === 'bracket') {
                 if (block.direct === 'open') {
                     indentation += 1;
 
-                    string_code = string_code.slice(0, -1);
-                    string_code += ' {';
+                    stringCode = stringCode.slice(0, -1);
+                    stringCode += ' {';
                 } else {
                     indentation -= 1;
                     if (indentation < 0) indentation = 0;
-                    string_code += '\n' + ' '.repeat(indentation * 4) + '}';
+                    stringCode += '\n' + ' '.repeat(indentation * 4) + '}';
                 }
             }
             else {
@@ -80,105 +86,114 @@ function json_to_pseudo_df(code) {
             }
         }
         catch (e) {
-            string_code += '\n' + ' '.repeat(indentation * 4) + 'UNABLE_TO_PROCESS_CODEBLOCK';
+            console.error(e);
+            stringCode += '\n' + ' '.repeat(indentation * 4) + 'UNABLE_TO_PROCESS_CODEBLOCK';
         }
     }
 
-    string_code += '\n}';
-    return string_code;
+    stringCode += '\n}';
+    return stringCode;
 }
 
 
 
-function process_block(block) {
-    const block_type = block.block;
-    if (block_type === 'else') return 'else';
+function processBlock(block) {
+    const blockType = block.block;
+    if (blockType === 'else') return 'else';
 
-    let block_action;
-    if (Object.prototype.hasOwnProperty.call(block, 'action')) block_action = block.action.trim();
-    else if (Object.prototype.hasOwnProperty.call(block, 'data')) block_action = block.data.trim();
+    let blockAction;
+    if (Object.prototype.hasOwnProperty.call(block, 'action')) blockAction = block.action.trim();
+    else if (Object.prototype.hasOwnProperty.call(block, 'data')) blockAction = block.data.trim();
     else throw new Error('Not action nor data!!');
 
     let attribute = (Object.prototype.hasOwnProperty.call(block, 'attribute')) ? block.attribute.toLowerCase() : '';
 
-    const chest_contents = block.args && block.args.items ? block.args.items : [];
-    const args = chest_contents.filter(i => i.item && i.item.id !== 'bl_tag');
-    const tags = chest_contents.filter(i => i.item && i.item.id === 'bl_tag');
+    const chestContents = block.args && block.args.items ? block.args.items : [];
+    const args = chestContents.filter(i => i.item && i.item.id !== 'bl_tag');
+    const tags = chestContents.filter(i => i.item && i.item.id === 'bl_tag');
 
-    const custom_sintax = custom_code_action_sintax(block_type, block_action, args, tags, attribute);
-    if (custom_sintax) {
-        return custom_sintax;
+    if (window.settings.noCustomSintax) {
+
     }
+    else {
+        const customSintax = customCodeActionSintax(blockType, blockAction, args, tags, attribute);
+        if (customSintax) {
+            return customSintax;
+        }
+    }
+    
+    const values = processArgsAndTags(args, tags);
 
-    const values = process_args_and_tags(args, tags);
-
-    const values_str = values.join(', ');
-    if (block_action === '') block_action = 'UNDEFINED_ACTION';
-    const action = `${code_block_name(block_type)}.${legalName(block_action)}`;
+    const valuesStr = values.join(', ');
+    if (blockAction === '') blockAction = 'UNDEFINED_ACTION';
+    blockAction = legalName(blockAction, !(['call_func', 'start_process'].includes(blockType)));
+    const action = `${codeBlockName(blockType)}.${blockAction}`;
 
     let target = '';
     if (Object.prototype.hasOwnProperty.call(block, 'target')) {
         target = `${block.target}:`;
     }
 
-    let sub_action = '';
+    let subAction = '';
     if (Object.prototype.hasOwnProperty.call(block, 'subAction')) {
-        sub_action = `.${block.subAction}`;
+        subAction = `.${block.subAction}`;
     }
     
     if (attribute) {
         attribute = `.${block.attribute}`;
     }
 
-    return `${target}${action}${attribute}${sub_action}(${values_str})`;
+    return `${target}${action}${attribute}${subAction}(${valuesStr})`;
 }
 
-function handle_line_starter(block) {
-    const starter_type = block.block;
+function handleLineStarter(block) {
+    const starterType = block.block;
     const mapping = {
         'process': 'Process',
         'func': 'Function',
         'event': 'PlayerEvent',
         'entity_event': 'EntityEvent'
     };
-    const block_type = mapping[starter_type];
-    if (!block_type) throw new Error('Unknown starter type: ' + starter_type);
+    const blockType = mapping[starterType];
+    if (!blockType) throw new Error('Unknown starter type: ' + starterType);
 
     let name;
-    if (Object.prototype.hasOwnProperty.call(block, 'data')) name = block.data;
+    if (Object.prototype.hasOwnProperty.call(block, 'data')) name = legalName(block.data);
     else if (Object.prototype.hasOwnProperty.call(block, 'action')) name = block.action;
     else throw new Error('Not data nor action!!');
 
-    name = legalName(name);
     if (name === '') name = 'UNNAMED';
 
-    let args_str;
+    let argsStr;
     if (block.args && block.args.items) {
         const args = block.args.items;
-        const values = args.map(i => process_value(i.item));
-        args_str = values.join(', ');
+        const values = args.map(i => processValue(i.item));
+        argsStr = values.join(', ');
     }
-    else args_str = '';
+    else argsStr = '';
 
-    return `${block_type} ${name}(${args_str})`;
+    let lagSlay = '';
+    if (block.attribute === 'LS-CANCEL') lagSlay = 'LS-CANCEL ';
+
+    return `${blockType} ${lagSlay}${name}(${argsStr})`;
 }
 
-function process_args_and_tags(args, tags) {
+function processArgsAndTags(args, tags) {
     const values = [];
     for (const i of args) {
         const arg = i.item;
-        const processed = process_value(arg);
+        const processed = processValue(arg);
         values.push(processed);
     }
     for (const i of tags) {
         const tag = i.item;
-        const processed = process_tag(tag);
+        const processed = processTag(tag);
         if (processed) values.push(processed);
     }
     return values
 }
 
-function process_value(value) {
+function processValue(value) {
     if (!value || !value.id) {
         console.error('UNABLE_TO_PROCESS_VALUE:', value);
         return 'UNABLE_TO_PROCESS_VALUE';
@@ -196,12 +211,15 @@ function process_value(value) {
     function txt(value) {
         return `'${properString(value.data.name, "'")}'`;
     }
+
     function comp(value) {
         return `"${properString(value.data.name, '"')}"`;
     }
+
     function num(value) {
         return String(value.data.name);
     }
+
     function loc(value) {
         const coords = value.data.loc;
         const parts = [
@@ -213,55 +231,65 @@ function process_value(value) {
         if (coords.yaw !== undefined) parts.push(formatDecimals(coords.yaw));
         return `Loc(${parts.join(', ')})`;
     }
+
     function vec(value) {
         const coords = value.data;
         return `Vec(${formatDecimals(coords.x)}, ${formatDecimals(coords.y)}, ${formatDecimals(coords.z)})`;
     }
+
     function snd(value) {
         const pitch = (value.data.pitch !== 1.0) ? `, pitch=${value.data.pitch}` : '';
         const volume = (value.data.vol !== 2.0) ? `, vol=${value.data.vol}` : '';
         return `Snd("${value.data.sound}"${pitch}${volume})`;
     }
-    function part(value) {
-        const cluster_data = value.data.cluster;
-        const amount = (cluster_data.amount !== 1) ? `, amount=${cluster_data.amount}` : '';
-        const spread = (cluster_data.horizontal === 0 && cluster_data.vertical === 0) ? '' : `, spread=(${cluster_data.horizontal},${cluster_data.vertical})`;
 
-        const other_data = value.data.data;
-        let processed_data = '';
-        for (let i in other_data) {
-            processed_data += (i === 'rgb') ? `, color="#${other_data[i].toString(16)}"` : `, ${i}="${other_data[i]}"`;
+    function part(value) {
+        const clusterData = value.data.cluster;
+        const amount = (clusterData.amount !== 1) ? `, amount=${clusterData.amount}` : '';
+        const spread = (clusterData.horizontal === 0 && clusterData.vertical === 0) ? '' : `, spread=(${clusterData.horizontal},${clusterData.vertical})`;
+
+        const otherData = value.data.data;
+        let processedData = '';
+        for (let i in otherData) {
+            processedData += (i === 'rgb') ? `, color="#${otherData[i].toString(16)}"` : `, ${i}="${otherData[i]}"`;
         }
-        return `Par("${value.data.particle}"${amount}${spread}${processed_data})`;
+        return `Par("${value.data.particle}"${amount}${spread}${processedData})`;
     }
+
     function pot(value) {
         const amplifier = (value.data.amp !== 0) ? `, amp=${value.data.amp + 1}` : '';
         const duration = (value.data.dur !== 1000000) ? `, dur=${value.data.dur}` : ''; // TODO: MM:SS format
         return `Pot("${value.data.pot}"${amplifier}${duration})`;
     }
+
     function variable(value) {
-        const scopes = {
-            'line': 'line',
-            'local': 'local',
-            'unsaved': 'game',
-            'saved': 'save'
-        };
-        const scopeKey = value.data.scope;
-        const s = scopes[scopeKey] || scopeKey;
-        return `${s} ${legalName(value.data.name)}`;
+        const scope = value.data.scope;
+        if (window.settings.lineScopeDefault && scope === 'line') {
+            return legalName(value.data.name);
+        }
+        const scopes =
+            (window.settings.shortScopes === true) ?
+            {'line':'I', 'local':'L', 'unsaved':'G', 'saved':'S'} :
+            {'line':'line','local':'local', 'unsaved':'game', 'saved':'save'};
+        const scopeMapped = scopes[scope];
+        return `${scopeMapped} ${legalName(value.data.name)}`;
     }
+
     function g_val(value) {
         return `GVal("${value.data.type}"${value.data.target && value.data.target !== 'Default' ? `, target="${value.data.target}"` : ''})`;
     }
+
     function pn_el(value) {
-        const default_value = (value.data.default_value) ? (` = ${process_value(value.data.default_value)}`) : ('');
+        const defaultValue = (value.data.defaultValue) ? (` = ${processValue(value.data.defaultValue)}`) : ('');
         const mapping = { 'txt': 'str', 'comp': 'txt', 'part': 'par' };
         const type = mapping[value.data.type] || value.data.type;
-        return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${type.charAt(0).toUpperCase() + type.slice(1)}${default_value}`;
+        return `Param ${legalName(value.data.name)} :${value.data.optional ? ' optional' : ''}${value.data.plural ? ' plural' : ''} ${type.charAt(0).toUpperCase() + type.slice(1)}${defaultValue}`;
     }
+
     function bl_tag(value) {
         return `Tag("${value.data.tag}"="${value.data.option}")`;
     }
+
     function item(value) { // TODO
         const itemStr = value.data.item;
         const needle = 'id:"minecraft:';
@@ -272,11 +300,12 @@ function process_value(value) {
         const trimmed = endIndex === -1 ? trimmedStart : trimmedStart.slice(0, endIndex);
         return `Item("${trimmed}")`;
     }
+
     function hint(value) {
         return 'FunctionHint()'
     }
 
-    const value_processors = {
+    const valueProcessors = {
         'txt': txt,
         'comp': comp,
         'num': num,
@@ -293,43 +322,47 @@ function process_value(value) {
         'hint': hint
     };
 
-    const value_type = value.id;
-    if (Object.prototype.hasOwnProperty.call(value_processors, value_type)) {
+    const valueType = value.id;
+    if (Object.prototype.hasOwnProperty.call(valueProcessors, valueType)) {
         try {
-            return value_processors[value_type](value);
+            return valueProcessors[valueType](value);
         } catch (e) {
             console.error('ERROR PROCESSING VALUE:', e);
         }
     } else {
-        console.error('UNABLE_TO_PROCESS_VALUE: unknown type', value_type);
+        console.error('UNABLE_TO_PROCESS_VALUE: unknown type', valueType);
     }
     return 'UNABLE_TO_PROCESS_VALUE';
 }
 
-function process_tag(tag) {
+function processTag(tag) {
     if (TAGS_FILE === null) {
-        throw new Error('TAGS_FILE no está cargado. Debes cargar tags.json antes de procesar tags.');
+        throw new Error('TAGS_FILE is not loaded');
     }
-    const tags_json = TAGS_FILE;
+    const tagsJson = TAGS_FILE;
 
-    const tag_data = tag.data;
-    const block = tag_data.block;
-    const action = tag_data.action;
-    const tag_name = tag_data.tag;
-    const option = tag_data.option;
+    const tagData = tag.data;
+    const block = tagData.block;
+    const action = tagData.action;
+    const tagName = tagData.tag;
+    const option = tagData.option;
+
+    if (window.settings.showAllTags) {
+        return `Tag("${tagName}"="${option}")`;
+    }
 
     try {
-        if (tags_json[block] && tags_json[block][action] && tags_json[block][action][tag_name] === option) {
+        if (tagsJson[block] && tagsJson[block][action] && tagsJson[block][action][tagName] === option) {
             return '';
         }
     } catch (e) {
 
     }
 
-    return `Tag("${tag_name}"="${option}")`;
+    return `Tag("${tagName}"="${option}")`;
 }
 
-function code_block_name(code_block) {
+function codeBlockName(codeBlock) {
     const names = {
         'player_action': 'Player',
         'if_player': 'ifPlayer',
@@ -345,17 +378,17 @@ function code_block_name(code_block) {
         'control': 'Control',
         'select_obj': 'Select'
     };
-    return names[code_block] || code_block;
+    return names[codeBlock] || codeBlock;
 }
 
-function custom_code_action_sintax(block_type, block_action, args, tags, attribute) {
-    if (block_type === 'set_var') {
+function customCodeActionSintax(blockType, blockAction, args, tags, attribute) {
+    if (blockType === 'set_var') {
         if (!args || args.length === 0) {
-            return `EmptyChestSlot = ${block_action}()`;
+            return `EmptyChestSlot = ${blockAction}()`;
         }
-        const var_in_first_slot = (args[0].item.id === 'var');
-        if (args.length === 2 && (block_action === '=' || block_action === '+=' || block_action === '-=') && var_in_first_slot) {
-            return `${process_value(args[0].item)} ${block_action} ${process_value(args[1].item)}`;
+        const varInFirstSlot = (args[0].item.id === 'var');
+        if (args.length === 2 && (blockAction === '=' || blockAction === '+=' || blockAction === '-=') && varInFirstSlot) {
+            return `${processValue(args[0].item)} ${blockAction} ${processValue(args[1].item)}`;
         }
 
         const replacers = {
@@ -368,23 +401,23 @@ function custom_code_action_sintax(block_type, block_action, args, tags, attribu
             '+=': 'Increment',
             '-=': 'Decrement'
         };
-        if (Object.prototype.hasOwnProperty.call(replacers, block_action)) block_action = replacers[block_action];
+        if (Object.prototype.hasOwnProperty.call(replacers, blockAction)) blockAction = replacers[blockAction];
 
-        if (!var_in_first_slot) {
-            const values_str = process_args_and_tags(args, tags).join(', ');
-            return `Set.${block_action}(${values_str})`;
+        if (!varInFirstSlot) {
+            const valuesStr = processArgsAndTags(args, tags).join(', ');
+            return `Set.${blockAction}(${valuesStr})`;
         }
 
-        const values_str = process_args_and_tags(args.slice(1), tags).join(', ');
-        return `${process_value(args[0].item)} = ${block_action}(${values_str})`;
+        const valuesStr = processArgsAndTags(args.slice(1), tags).join(', ');
+        return `${processValue(args[0].item)} = ${blockAction}(${valuesStr})`;
     }
 
-    if (block_type === 'if_var') {
-        if (args.length === 2 && ['=', '!=', '<', '>', '<=', '>='].includes(block_action)) {
-            let op = block_action;
+    if (blockType === 'if_var') {
+        if (args.length === 2 && ['=', '!=', '<', '>', '<=', '>='].includes(blockAction)) {
+            let op = blockAction;
             if (op === '=') op = '==';
             if (attribute) attribute = `${attribute} `;
-            return `if ${attribute}(${process_value(args[0].item)} ${op} ${process_value(args[1].item)})`;
+            return `if ${attribute}(${processValue(args[0].item)} ${op} ${processValue(args[1].item)})`;
         }
         const replacers = {
             '=': 'Equals',
@@ -394,31 +427,43 @@ function custom_code_action_sintax(block_type, block_action, args, tags, attribu
             '<=': 'LessOrEqual',
             '>=': 'GreaterOrEqual'
         };
-        if (Object.prototype.hasOwnProperty.call(replacers, block_action)) block_action = replacers[block_action];
+        if (Object.prototype.hasOwnProperty.call(replacers, blockAction)) blockAction = replacers[blockAction];
 
         if (attribute) attribute = `.${attribute}`;
 
-        const values_str = process_args_and_tags(args, tags).join(', ');
-        return `ifVar.${block_action}${attribute}(${values_str})`;
+        const valuesStr = processArgsAndTags(args, tags).join(', ');
+        return `ifVar.${blockAction}${attribute}(${valuesStr})`;
     }
 
     return null;
 }
 
-function process_all(original_nbt_data) {
-    if (original_nbt_data.trim() === '') return '';
+
+
+function getSettings() {
+    const result = {};
+    document.querySelectorAll("#settingsPanel input[type='checkbox']").forEach(box => {
+        const key = box.dataset.setting;
+        result[key] = box.checked;
+    });
+    return result;
+}
+
+function processAll(originalNbtData) {
+    if (originalNbtData.trim() === '') return '';
     try {
-        console.log(`PARSING:\n${original_nbt_data}\n`);
+        console.log(`\n\nPARSING:\n${originalNbtData}\n`);
 
-        const base64_code = get_base64_code(original_nbt_data);
+        const base64Code = getBase64Code(originalNbtData);
         console.log(`CODE DATA:`);
-        console.log(base64_code);
+        console.log(base64Code);
 
-        const json_code = base64_to_json(base64_code);
+        const jsonCode = base64ToJson(base64Code);
         console.log(`CODE AS JSON:`);
-        console.log(json_code);
+        console.log(jsonCode);
 
-        const processed = json_to_pseudo_df(json_code);
+        window.settings = getSettings();
+        const processed = jsonToPseudoDf(jsonCode);
         console.log(`SUCCESSFUL! PARSED CODE:`);
         console.log(processed);
 

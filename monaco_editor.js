@@ -18,7 +18,8 @@ require(["vs/editor/editor.main"], function () {
             { open: '[', close: ']' },
             { open: '(', close: ')' },
             { open: '"', close: '"' },
-            { open: "'", close: "'" }
+            { open: "'", close: "'" },
+            { open: '`', close: '`' }
         ]
     });
 
@@ -48,10 +49,10 @@ require(["vs/editor/editor.main"], function () {
                 [/\bItem\b/, "kwItem"],
                 [/\bParam\b/, "kwParam"],
                 [/\bTag\b/, "kwTag"],
-                [/\bsave\b/, "kwsave"],
-                [/\bgame\b/, "kwgame"],
-                [/\blocal\b/, "kwlocal"],
-                [/\bline\b/, "kwline"],
+                [/\b(save|S)\b/, "kwsave"],
+                [/\b(game|G)\b/, "kwgame"],
+                [/\b(local|L)\b/, "kwlocal"],
+                [/\b(line|I)\b/, "kwline"],
                 [/\bFunction\b/, "kwFunction"],
                 [/\bPlayerEvent\b/, "kwPlayerEvent"],
                 [/\bEntityEvent\b/, "kwEntityEvent"],
@@ -77,7 +78,10 @@ require(["vs/editor/editor.main"], function () {
 
                 [/\b(optional|plural)\b/, "keyword"],
 
+                [/\bLS\-CANCEL\b/, "kwLagSlay"],
+
                 [/(\.)([A-Za-z0-9_·@\-]+)/, ["delimiter", "function"]],
+                [/(\.)(`(?:[^`\\]|\\.)*`)/, ["delimiter", "function"]],
                 [/\b[A-Za-z0-9_·@\-]+(?=\s*\()/, "function"],
 
                 [/\b([A-Za-z])*(?=:)/, "target"],
@@ -89,9 +93,20 @@ require(["vs/editor/editor.main"], function () {
                 [/%(default|uuid|selected|damager|killer|shooter|victim|projectile)/, "%code"],
                 [/%(random|round|index|entry|var|math)(?=\(.*\))/, "%code"],
 
-                [/[A-Za-z0-9_@\.·\-]+(?=\s*[%+\/=;,:<>)\-])/, "variable"],
+                [/[A-Za-z0-9_·@%\-][^%\+\/=;,:<>\)\s]+/, "variable"],
+                [/[A-Za-z0-9_·@%]/, "variable"],
+                ["`", { token: "variable.delim", next: "@btString" }],
 
                 [/;/, "delimiter"]
+            ],
+
+            btString: [
+                ["`", { token: "variable.delim", next: "@pop" }],
+
+                [/%(default|uuid|selected|damager|killer|shooter|victim|projectile)/, "%code"],
+                [/%(random|round|index|entry|var|math)(?=\(.*\))/, "%code"],
+                
+                [/./, "variable"]
             ]
         }
     });
@@ -100,8 +115,8 @@ require(["vs/editor/editor.main"], function () {
         base: "vs-dark",
         inherit: true,
         rules: [
-            { token: "kwStr",   foreground: "#6CEFEF" },
-            { token: "kwTxt",   foreground: "#83DA2B" },
+            { token: "kwStr",   foreground: "#52dcdcff" },
+            { token: "kwTxt",   foreground: "#7dcb2fff" },
             { token: "kwNum",   foreground: "#D98888" },
             { token: "kwLoc",   foreground: "#4ED54E" },
             { token: "kwVec",   foreground: "#2afca8" },
@@ -111,7 +126,7 @@ require(["vs/editor/editor.main"], function () {
             { token: "kwGVal",   foreground: "#D6AB58" },
             { token: "kwItem",   foreground: "#E2B460" },
             { token: "kwParam",   foreground: "#a8fca8" },
-            { token: "kwTag",   foreground: "#E2E242" },
+            { token: "kwTag",   foreground: "#c586c0" },
             { token: "kwsave",   foreground: "#DCDC35" },
             { token: "kwgame",   foreground: "#CFB9AD" },
             { token: "kwlocal",   foreground: "#8CE38C" },
@@ -121,11 +136,11 @@ require(["vs/editor/editor.main"], function () {
             { token: "kwPlayerEvent",  foreground: "#82F9EA" },
             { token: "kwEntityEvent",  foreground: "#E2B306" },
             { token: "kwProcess",  foreground: "#01ED48" },
-            { token: "kwPlayer",  foreground: "#CF8C04" },
+            { token: "kwPlayer",  foreground: "#c69025ff" },
             { token: "kwifPlayer",  foreground: "#D3AD66" },
             { token: "kwEntity",  foreground: "#80D218" },
             { token: "kwifEntity",  foreground: "#D17B68" },
-            { token: "kwSet",  foreground: "#E2E2E2" },
+            { token: "kwSet",  foreground: "#dbe9ff" },
             { token: "kwifVar",  foreground: "#A461FF" },
             { token: "kwGame",  foreground: "#D37272" },
             { token: "kwifGame",  foreground: "#991014" },
@@ -138,13 +153,15 @@ require(["vs/editor/editor.main"], function () {
             { token: "kwelse",         foreground: "#e4eab9" },
             { token: "kwnot",         foreground: "#b86800ff" },
 
+            { token: "kwLagSlay", foreground: "#df7e00ff" },
+
             { token: "comment",   foreground: "#AAAAAA" },
             { token: "number",   foreground: "#F1FF70" },
-            { token: "keyword",   foreground: "#FF7DD8" },
-            { token: "%code",   foreground: "#ffe68c" },
-            { token: "variable",   foreground: "#9cd9f1" },
+            { token: "keyword",   foreground: "#c586c0" },
+            { token: "%code",   foreground: "#ccb666ff" },
+            { token: "variable",   foreground: "#9cdcfe" },
             { token: "function",   foreground: "#dcdc9d" },
-            { token: "target",   foreground: "#63B763" }
+            { token: "target",   foreground: "#6ea86e" }
         ],
         colors: {
             "editor.foreground": "#ffffff",

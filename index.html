@@ -28,7 +28,7 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             margin-right: 15px;
         }
 
@@ -72,6 +72,45 @@
             visibility: visible;
             opacity: 1;
         }
+
+        #settingsWrapper {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        #settingsToggle {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #settingsPanel {
+            background: #ddd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            width: max-content;
+            border: 1px solid #aaa;
+            margin-top: 5px;
+
+            position: absolute;
+            z-index: 1000;
+
+            max-height: 500px;
+            opacity: 1;
+            transition: opacity .15s ease, transform .15s ease;
+        }
+
+        #settingsPanel.hidden {
+            opacity: 0;
+            transform: translateY(-5px);
+            pointer-events: none;
+        }
+
+        #settingsPanel label {
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 
 </head>
@@ -100,12 +139,27 @@
 <div id="inputs-container">
 </div>
 
-<br>
 <button id="processBtn" onclick="processAllCode()" disabled>Process Code</button>
+<div id="settingsWrapper">
+    <button id="settingsToggle">Advanced Settings ▾</button>
+
+    <div id="settingsPanel" class="hidden">
+        <label><input type="checkbox" data-setting="shortScopes"> Short Variable Scopes</label><br>
+        <label><input type="checkbox" data-setting="lineScopeDefault"> Don't Specify Line Scope</label><br>
+        <br>
+        <label><input type="checkbox" data-setting="showAllTags"> Show All Block Tags</label><br>
+        <br>
+        <label><input type="checkbox" data-setting="noCustomSintax"> No Special Syntax for Set Variable or If Variable</label><br>
+        <br>
+        <label><input type="checkbox" data-setting="keepVariableNameSpaces"> Keep Spaces in Variable Names</label><br>
+        <label><input type="checkbox" data-setting="encapsulateAllNames"> Encapsulate All Names in `Backticks`</label><br>
+    </div>
+</div>
+<br><br>
 <button onclick="shareAndCopy()">Share as Link</button>
 <button onclick="copyCode()">Copy Code</button>
 
-
+<br><br>
 <h3>Output:</h3>
 <div id="editorContainer"></div>
 
@@ -115,6 +169,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
 <script>
+settings = {
+    shortScopes: false,
+    lineScopeDefault: false,
+    showAllTags: false,
+    noCustomSintax: false,
+    keepVariableNameSpaces: false,
+    encapsulateAllNames: false
+};
+
+document.getElementById("settingsToggle").addEventListener("click", () => {
+    const panel = document.getElementById("settingsPanel");
+    panel.classList.toggle("hidden");
+});
+
 document.querySelectorAll('.tooltip').forEach(tip => {
     tip.addEventListener('mouseenter', () => {
         const rect = tip.getBoundingClientRect();
@@ -128,12 +196,15 @@ codeMessages = {
     success: '// Code processed successfully\n// You can edit it before sharing it',
     processCode: '// Error\n// Paste NBT data and process it before sharing'
 };
+
+settings = {}; // TODO
+
 function processAllCode() {
     const boxes = inputs;
     let output = '';
     for (let box of boxes) {
         const text = box.value;
-        const processed = process_all(text);
+        const processed = processAll(text);
         output += '\n\n' + processed;
     }
     console.log(boxes);
