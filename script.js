@@ -41,7 +41,7 @@ function legalName(str, cannotAlwaysEncapsulate) {
     if (!window.settings.keepVariableNameSpaces) {
         str = str.replaceAll(' ', '-').replaceAll('.', '·');
     }
-    if ((window.settings.encapsulateAllNames && !cannotAlwaysEncapsulate) || /[%\+\/=;,:<>`\s]/.test(str)) {
+    if ((window.settings.encapsulateAllNames && !cannotAlwaysEncapsulate) || /[\+\/=;,:<>`\s]/.test(str)) {
         str = '`' + str.replaceAll('`', '\\`') + '`';
     }
     return str;
