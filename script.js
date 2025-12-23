@@ -136,7 +136,7 @@ function processBlock(block) {
 
     let subAction = '';
     if (Object.prototype.hasOwnProperty.call(block, 'subAction')) {
-        subAction = `.${block.subAction}`;
+        subAction = `.${block.subAction.trim()}`;
     }
     
     if (attribute) {
@@ -178,18 +178,27 @@ function handleLineStarter(block) {
     return `${blockType} ${lagSlay}${name}(${argsStr})`;
 }
 
-function processArgsAndTags(args, tags) {
+function processArgsAndTags(args, tags, startingValuesSlot = 0) {
     const values = [];
+
+    let lastValueSlot = startingValuesSlot;
     for (const i of args) {
+        const slot = i.slot;
+        const emptyValues = slot - lastValueSlot - 1;
+        for (let j = 0; j < emptyValues; j++) values.push('');
+        lastValueSlot = slot;
+
         const arg = i.item;
         const processed = processValue(arg);
         values.push(processed);
     }
+
     for (const i of tags) {
         const tag = i.item;
-        const processed = processTag(tag);
+        const processed = processTag(tag); // Can return ''
         if (processed) values.push(processed);
     }
+
     return values
 }
 
@@ -408,7 +417,7 @@ function customCodeActionSintax(blockType, blockAction, args, tags, attribute) {
             return `Set.${blockAction}(${valuesStr})`;
         }
 
-        const valuesStr = processArgsAndTags(args.slice(1), tags).join(', ');
+        const valuesStr = processArgsAndTags(args.slice(1), tags, 1).join(', ');
         return `${processValue(args[0].item)} = ${blockAction}(${valuesStr})`;
     }
 
